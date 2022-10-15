@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".userController.Login">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="62dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="sans-serif-black"
+                android:text="login"
+                android:textColor="#006400"
+                android:textSize="50dp" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="129dp"
+                android:layout_height="122dp"
+                android:layout_marginLeft="40dp"
+                app:srcCompat="@drawable/logo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="376dp"
+                android:layout_height="29dp"
+                android:layout_margin="10dp"
+                android:text="email"
+                android:textColor="@color/black"
+                android:textColorHint="#FFFBFB"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/loginemail"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:hint="email"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textColorHint="#AFA4A4"/>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="36dp"
+                android:text="password"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/loginpassword"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:layout_marginTop="10dp"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:textColorHint="#AFA4A4" />
+
+            <CheckBox
+                android:id="@+id/rememmber_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:text="rememberme"
+                android:textColorHint="#FFFBFB"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnlogin"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:layout_marginTop="10dp"
+                android:text="login"
+                android:textColor="#EDE8E8"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/txtdonthaveacc"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="60dp"
+                android:layout_height="wrap_content"
+                android:text="Don't Have Account? Register"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

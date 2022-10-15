@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">EAD project</string>
+
+    <string-array name="role">
+        <item>Choose</item>
+        <item>User</item>
+        <item>Owner</item>
+    </string-array>
+
+    <string-array name="vehicleType">
+        <item>Choose</item>
+        <item>Car</item>
+        <item>Van</item>
+        <item>Bus</item>
+        <item>Motor Bicycle</item>
+        <item>Three Wheeler</item>
+    </string-array>
+
+    <string-array name="fuelType">
+        <item>Choose</item>
+        <item>Petrol</item>
+        <item>Diesel</item>
+        <item>Super Diesel</item>
+    </string-array>
+
+</resources>
+
+
+
+

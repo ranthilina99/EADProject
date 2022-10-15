@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".userController.Register">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="178dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="sans-serif-black"
+                android:text="signup"
+                android:textColor="@color/purple_700"
+                android:textSize="50dp"/>
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="129dp"
+                android:layout_height="122dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="40dp"
+                app:srcCompat="@drawable/ic_launcher_background" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/registerfullName"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:hint="fullName"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textColor="#100E0E"
+                android:textColorHint="#817B7B" />
+
+            <EditText
+                android:id="@+id/registeremail"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:hint="email"
+                android:inputType="textEmailAddress"
+                android:padding="16dp"
+                android:textColor="#1E1818"
+                android:textColorHint="#958E8E"/>
+
+            <EditText
+                android:id="@+id/registermobile"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#120F0F"
+                android:hint="mobile"
+                android:inputType="phone"
+                android:padding="16dp"
+                android:textColor="#000000"
+                android:textColorHint="#7C7676" />
+
+            <Spinner
+                android:id="@+id/spinnerRole"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.89"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.832" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/customerLayer">
+
+                <Spinner
+                    android:id="@+id/spinnerVehicleType"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.89"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.832" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/registervehicleNo1"
+                        android:layout_width="120dp"
+                        android:layout_height="68dp"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="#120F0F"
+                        android:hint="xxx"
+                        android:textSize="25dp"
+                        android:layout_margin="10dp"
+                        android:padding="16dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#7C7676" />
+                    <EditText
+                        android:id="@+id/registervehicleNo2"
+                        android:layout_width="match_parent"
+                        android:layout_height="68dp"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="#120F0F"
+                        android:hint="xxxx"
+                        android:textSize="25dp"
+                        android:layout_margin="10dp"
+                        android:padding="16dp"
+                        android:textColor="#000000"
+                        android:textColorHint="#7C7676" />
+                </LinearLayout>
+                <Spinner
+                    android:id="@+id/spinnerFuelType"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.89"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.832" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/ownerLayer">
+                <EditText
+                    android:id="@+id/registerCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#120F0F"
+                    android:hint="City"
+                    android:padding="16dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#7C7676" />
+
+                <EditText
+                    android:id="@+id/registerAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#120F0F"
+                    android:hint="Address"
+                    android:padding="16dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#7C7676" />
+
+                <EditText
+                    android:id="@+id/registerStationName"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#120F0F"
+                    android:hint="Station Name"
+                    android:padding="16dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#7C7676" />
+
+                <EditText
+                    android:id="@+id/registerStationNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="#120F0F"
+                    android:hint="Station No"
+                    android:padding="16dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#7C7676" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/registerpassword"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:layout_marginTop="10dp"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:textColor="#0B0909"
+                android:textColorHint="#8E8282"/>
+
+            <EditText
+                android:id="@+id/registerretypepassowrd"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:layout_marginTop="10dp"
+                android:hint="retypepassword"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:textColor="#100F0F"
+                android:textColorHint="#8A8080" />
+
+            <Button
+                android:id="@+id/btnregcreateaccount"
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                android:text="Create Account"
+                android:textStyle="bold"
+                android:background="@color/purple_500"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btnforgot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1"
+                    android:text="Already Have An Account?"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/txtsigiin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="signin"
+                    android:textColor="@color/purple_700"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
