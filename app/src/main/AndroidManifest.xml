@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EADProject">
-        <activity android:name=".QueueController.ViewLengthQueue"></activity>
+        <activity android:name=".OwnerController.OwnerProfile"></activity>
+        <activity android:name=".OwnerController.AddFuelDetailsOwner" />
+        <activity android:name=".QueueController.NoDisplayQueue" />
+        <activity android:name=".QueueController.UserViewQueueAllDetails" />
+        <activity android:name=".fuelController.ViewFuelStationDetails" />
+        <activity android:name=".QueueController.AddUserQueueDetails" />
+        <activity android:name=".fuelController.ViewFuelDetails" />
+        <activity android:name=".QueueController.ViewLengthQueue" />
         <activity android:name=".fuelController.FuelStation" />
         <activity android:name=".userController.UserProfile" />
         <activity android:name=".UserDashboard.Dashboard" />

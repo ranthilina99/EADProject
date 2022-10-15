@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    android:layout_height="match_parent"
-    tools:context=".userController.UserProfile">
+    tools:context=".OwnerController.OwnerProfile">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -45,23 +45,20 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
                 android:hint="Full Name"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileName"/>
+                android:id="@+id/OwnerProfileName"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileEmail"/>
+                android:id="@+id/OwnerProfileEmail"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
                 android:hint="Mobile"
                 android:inputType="phone"
                 android:layout_marginTop="20dp"
@@ -69,37 +66,41 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
                 android:hint="User Role"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileRole"/>
+                android:id="@+id/OwnerProfileRole"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
-                android:hint="Vehicle Type"
+                android:hint="Station Name"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileVehicleType"/>
+                android:id="@+id/OwnerProfileStationName"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
-                android:hint="Vehicle No"
+                android:hint="Station No"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileVehicleNo"/>
+                android:id="@+id/OwnerProfileStationNo"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_margin="5dp"
-                android:hint="Fuel Type"
+                android:hint="City"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileFuelType"/>
+                android:id="@+id/OwnerProfileCity"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:hint="Address"
+                android:layout_marginTop="20dp"
+                android:id="@+id/OwnerProfileAddress"/>
 
             <Button
                 android:id="@+id/btnUserProfileUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="Update"
