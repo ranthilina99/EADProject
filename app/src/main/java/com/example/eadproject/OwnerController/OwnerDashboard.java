@@ -1,4 +1,4 @@
-package com.example.eadproject.UserDashboard;
+package com.example.eadproject.OwnerController;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -13,68 +13,49 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.eadproject.DBHelper.DBHelper;
-import com.example.eadproject.QueueController.UserViewQueueAllDetails;
 import com.example.eadproject.R;
-import com.example.eadproject.userController.Login;
-import com.example.eadproject.userController.UserProfile;
 
-import org.w3c.dom.Text;
+public class OwnerDashboard extends AppCompatActivity {
 
-public class Dashboard extends AppCompatActivity {
-
+    private CardView cardView1,cardView2;
     private SwipeRefreshLayout layout;
-    private CardView card1,card2,card3,card4;
     private SQLiteDatabase sqLiteDatabaseObj;
     private Cursor cursor;
     private String email,id;
+    private TextView textView;
     DBHelper DB;
-    private TextView textViewMame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_owner_dashboard);
+
         email = getIntent().getStringExtra("email");
 
-        card4 = findViewById(R.id.card4);
-        card2 = findViewById(R.id.card2);
-        textViewMame = findViewById(R.id.textViewDashboardUser);
-        layout = findViewById(R.id.dashboardRefresh);
+        cardView1 = findViewById(R.id.ownerCard1);
+        cardView2 = findViewById(R.id.card2Owner);
+        layout = findViewById(R.id.ownerDashboardRefresh);
+        textView =  findViewById(R.id.textViewDashboardOwner);
 
         DB = new DBHelper(this);
 
-//        card1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-        card2.setOnClickListener(new View.OnClickListener() {
+        cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Dashboard.this, UserViewQueueAllDetails.class);
-                // Sending Email to Dashboard Activity using intent.
+                Intent intent = new Intent(getApplicationContext(), OwnerProfile.class);
                 intent.putExtra("email", email);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
-//        card3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-        card4.setOnClickListener(new View.OnClickListener() {
+        cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Dashboard.this, UserProfile.class);
-                // Sending Email to Dashboard Activity using intent.
-                intent.putExtra("email", email);
-                intent.putExtra("id", id);
+                Intent intent = new Intent(getApplicationContext(), AddFuelDetailsOwner.class);
                 startActivity(intent);
             }
         });
+
         layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -84,6 +65,7 @@ public class Dashboard extends AppCompatActivity {
         });
 
         loadData();
+
     }
 
     @SuppressLint("Range")
@@ -98,7 +80,7 @@ public class Dashboard extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_1_Name));
                 id = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_ID));
 
-                textViewMame.setText("Hello!" +" " +name);
+                textView.setText("Hello!" +" " +name);
                 // Closing cursor.
                 cursor.close();
             }

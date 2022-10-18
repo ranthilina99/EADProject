@@ -23,6 +23,11 @@
         <item>Super Diesel</item>
     </string-array>
 
+    <string-array name="finishType">
+        <item>Choose</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
 </resources>
 
 

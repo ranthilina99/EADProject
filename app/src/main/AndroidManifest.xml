@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EADProject">
-        <activity android:name=".OwnerController.OwnerProfile"></activity>
+        <activity android:name=".OwnerController.OwnerDashboard"/>
+        <activity android:name=".OwnerController.OwnerProfile" />
         <activity android:name=".OwnerController.AddFuelDetailsOwner" />
         <activity android:name=".QueueController.NoDisplayQueue" />
         <activity android:name=".QueueController.UserViewQueueAllDetails" />
@@ -18,7 +19,8 @@
         <activity android:name=".fuelController.ViewFuelDetails" />
         <activity android:name=".QueueController.ViewLengthQueue" />
         <activity android:name=".fuelController.FuelStation" />
-        <activity android:name=".userController.UserProfile" />
+        <activity android:name=".userController.UserProfile"
+            android:parentActivityName=".UserDashboard.Dashboard"/>
         <activity android:name=".UserDashboard.Dashboard" />
         <activity android:name=".userController.Register" />
         <activity

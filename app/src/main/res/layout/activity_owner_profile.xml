@@ -10,11 +10,11 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_gravity="center"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_marginTop="4dp"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/logo3" />
 
     <TextView
         android:id="@+id/textUserprofileName"
@@ -24,14 +24,14 @@
         android:fontFamily="sans-serif-black"
         android:text="Profile"
         android:textAlignment="center"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/darkblue"
         android:textSize="40dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginTop="10dp"
         android:textAlignment="center"
-        android:background="@color/purple_700"/>
+        android:background="@color/darkblue"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,62 +42,130 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Name"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="Full Name"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileEmail"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile No "
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="Mobile"
                 android:inputType="phone"
+                android:id="@+id/OwnerProfileMobile"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role Type"
                 android:layout_marginTop="20dp"
-                android:id="@+id/UserProfileMobile"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="User Role"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileRole"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Station Name"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="Station Name"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileStationName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Station No"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="Station No"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileStationNo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="City"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileCity"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="20dp"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:hint="Address"
-                android:layout_marginTop="20dp"
                 android:id="@+id/OwnerProfileAddress"/>
 
             <Button
-                android:id="@+id/btnUserProfileUpdate"
+                android:id="@+id/btnOwnerrProfileUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_marginTop="10dp"
@@ -108,12 +176,12 @@
                 android:textSize="18sp"/>
 
             <Button
-                android:id="@+id/btnUserProfileBack"
+                android:id="@+id/btnOwnerProfileBack"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="Back"
+                android:text="Delete"
                 android:textColor="#EDE8E8"
                 android:textSize="18sp"/>
 
