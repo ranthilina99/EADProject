@@ -42,7 +42,7 @@
         android:text="Queue Length"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="25dp"/>
+        android:textSize="20dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
         android:text="Average Time"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="25dp"/>
+        android:textSize="20dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -69,7 +69,7 @@
         android:id="@+id/avgTimeQueue"/>
 
     <Button
-        android:id="@+id/btnViewQueue1"
+        android:id="@+id/btnViewEnterQueue1"
         android:layout_width="match_parent"
         android:layout_height="68dp"
         android:layout_marginLeft="10dp"
@@ -80,7 +80,7 @@
         android:textSize="18sp"/>
 
     <Button
-        android:id="@+id/btnViewQueue2"
+        android:id="@+id/btnViewDetailsQueue2"
         android:layout_width="match_parent"
         android:layout_height="68dp"
         android:layout_marginLeft="10dp"

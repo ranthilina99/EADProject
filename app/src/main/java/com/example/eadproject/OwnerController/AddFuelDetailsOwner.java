@@ -2,15 +2,20 @@ package com.example.eadproject.OwnerController;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.R;
 
 public class AddFuelDetailsOwner extends AppCompatActivity {
@@ -18,6 +23,11 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
     private Spinner spinnerFuelType,spinnerFinish;
     private String fuelType,finishStatus;
     private Button btn1,btn2;
+    private Cursor cursor;
+    private String email, id;
+    DBHelper DB;
+    private SQLiteDatabase sqLiteDatabaseObj;
+    private EditText editTextStationName,getEditTextStationNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +38,13 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
         spinnerFinish = findViewById(R.id.spinnerFuelFinishStatusOwner);
         btn1 = findViewById(R.id.btnAddFuel);
         btn2 = findViewById(R.id.btnBackAddFuel);
+        editTextStationName = findViewById(R.id.textAddFuelStationOwner);
+        getEditTextStationNo = findViewById(R.id.textAddFuelStationNoOwner);
+
+        email = getIntent().getStringExtra("email");
+        id = getIntent().getStringExtra("id");
+
+        DB = new DBHelper(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -75,5 +92,31 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        editTextStationName.setEnabled(false);
+        getEditTextStationNo.setEnabled(false);
+
+        loadData();
+    }
+
+    @SuppressLint("Range")
+    private void loadData() {
+        sqLiteDatabaseObj = DB.getWritableDatabase();
+        // Adding search email query to cursor.
+        cursor = sqLiteDatabaseObj.query(DBHelper.TABLE_NAME, null, " " + DBHelper.Table_Column_2_Email + "=?", new String[]{email}, null, null, null);
+        while (cursor.moveToNext()) {
+            if (cursor.isFirst()) {
+                cursor.moveToFirst();
+
+                String stName = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_8_StationName));
+                String stNo = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_9_StationNo));
+
+                editTextStationName.setText(stName);
+                getEditTextStationNo.setText(stNo);
+
+                // Closing cursor.
+                cursor.close();
+            }
+        }
     }
 }

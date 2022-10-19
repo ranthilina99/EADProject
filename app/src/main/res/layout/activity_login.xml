@@ -34,7 +34,7 @@
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="150dp"
-                android:layout_height="170dp"
+                android:layout_height="150dp"
                 android:layout_marginLeft="50dp"
                 app:srcCompat="@drawable/logo4" />
         </LinearLayout>
@@ -82,21 +82,12 @@
                 android:padding="16dp"
                 android:textColorHint="#AFA4A4" />
 
-            <CheckBox
-                android:id="@+id/rememmber_me"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"
-                android:text="Remember me"
-                android:textColorHint="#FFFBFB"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/btnlogin"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="50dp"
                 android:text="login"
                 android:textColor="#EDE8E8"
                 android:textSize="18sp"/>

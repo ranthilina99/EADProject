@@ -10,11 +10,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.QueueController.UserViewQueueAllDetails;
 import com.example.eadproject.R;
+import com.example.eadproject.fuelController.FuelStation;
+import com.example.eadproject.fuelController.ViewFuelStationDetails;
 import com.example.eadproject.userController.Login;
 import com.example.eadproject.userController.UserProfile;
 
@@ -29,6 +33,7 @@ public class Dashboard extends AppCompatActivity {
     private String email,id;
     DBHelper DB;
     private TextView textViewMame;
+    private ImageView button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +41,26 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         email = getIntent().getStringExtra("email");
 
+        card1 = findViewById(R.id.card1);
+        card3 = findViewById(R.id.card3);
         card4 = findViewById(R.id.card4);
         card2 = findViewById(R.id.card2);
         textViewMame = findViewById(R.id.textViewDashboardUser);
         layout = findViewById(R.id.dashboardRefresh);
+        button =  findViewById(R.id.userLogout);
 
         DB = new DBHelper(this);
 
-//        card1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        card1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Dashboard.this, ViewFuelStationDetails.class);
+                // Sending Email to Dashboard Activity using intent.
+//                intent.putExtra("email", email);
+//                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,12 +71,16 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        card3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        card3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Dashboard.this, FuelStation.class);
+                // Sending Email to Dashboard Activity using intent.
+//                intent.putExtra("email", email);
+//                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
         card4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +99,13 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+            }
+        });
         loadData();
     }
 

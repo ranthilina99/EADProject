@@ -10,10 +10,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.R;
+import com.example.eadproject.userController.Login;
 
 public class OwnerDashboard extends AppCompatActivity {
 
@@ -23,6 +27,7 @@ public class OwnerDashboard extends AppCompatActivity {
     private Cursor cursor;
     private String email,id;
     private TextView textView;
+    private ImageView button;
     DBHelper DB;
 
     @Override
@@ -36,6 +41,7 @@ public class OwnerDashboard extends AppCompatActivity {
         cardView2 = findViewById(R.id.card2Owner);
         layout = findViewById(R.id.ownerDashboardRefresh);
         textView =  findViewById(R.id.textViewDashboardOwner);
+        button = findViewById(R.id.ownerLogout);
 
         DB = new DBHelper(this);
 
@@ -52,6 +58,8 @@ public class OwnerDashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddFuelDetailsOwner.class);
+                intent.putExtra("email", email);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
@@ -64,8 +72,14 @@ public class OwnerDashboard extends AppCompatActivity {
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+            }
+        });
         loadData();
-
     }
 
     @SuppressLint("Range")
