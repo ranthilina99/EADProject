@@ -23,9 +23,10 @@
         android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-black"
         android:text="Queue Data"
+        android:textAllCaps="true"
         android:textAlignment="center"
         android:textColor="@color/darkblue"
-        android:textSize="40dp"/>
+        android:textSize="30dp"/>
 
     <TextView
         android:layout_width="match_parent"

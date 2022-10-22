@@ -22,7 +22,7 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
 
     private Spinner spinnerFuelType,spinnerFinish;
     private String fuelType,finishStatus;
-    private Button btn1,btn2;
+    private Button btn1,btn2,btn3;
     private Cursor cursor;
     private String email, id;
     DBHelper DB;
@@ -38,6 +38,7 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
         spinnerFinish = findViewById(R.id.spinnerFuelFinishStatusOwner);
         btn1 = findViewById(R.id.btnAddFuel);
         btn2 = findViewById(R.id.btnBackAddFuel);
+        btn3 = findViewById(R.id.btnUpdateFuelOwner);
         editTextStationName = findViewById(R.id.textAddFuelStationOwner);
         getEditTextStationNo = findViewById(R.id.textAddFuelStationNoOwner);
 
@@ -89,6 +90,15 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),OwnerDashboard.class);
+                startActivity(intent);
+            }
+        });
+
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),UpdateFuelDetails.class);
                 startActivity(intent);
             }
         });

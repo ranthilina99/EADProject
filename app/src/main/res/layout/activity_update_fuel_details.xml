@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp"
-    tools:context=".OwnerController.AddFuelDetailsOwner">
+    tools:context=".OwnerController.UpdateFuelDetails">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -18,13 +17,13 @@
 
     <TextView
         android:id="@+id/textView20"
+        android:textAllCaps="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-black"
-        android:text="Add Fuel Details"
+        android:text="Update Fuel Details"
         android:textAlignment="center"
-        android:textAllCaps="true"
         android:textColor="@color/darkblue"
         android:textSize="30dp"/>
 
@@ -61,7 +60,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/textAddFuelStationOwner"
+                    android:id="@+id/textUpdateFuelStationOwner"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
                     android:hint="Station Name"
@@ -86,7 +85,7 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/textAddFuelStationNoOwner"
+                    android:id="@+id/textUpdateFuelStationNoOwner"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
                     android:hint="Station No"
@@ -112,7 +111,7 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
                 <Spinner
-                    android:id="@+id/spinnerFuelTypeOwner"
+                    android:id="@+id/spinnerUpdateFuelTypeOwner"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginLeft="10dp" />
@@ -135,7 +134,7 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/textAddFuelStationArrivalTimeOwner"
+                    android:id="@+id/textUpdateFuelStationArrivalTimeOwner"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
                     android:hint="Arrival Time"
@@ -161,27 +160,17 @@
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
                 <Spinner
-                    android:id="@+id/spinnerFuelFinishStatusOwner"
+                    android:id="@+id/spinnerUpdateFuelFinishStatusOwner"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginLeft="10dp" />
             </LinearLayout>
 
             <Button
-                android:id="@+id/btnAddFuel"
+                android:id="@+id/btnUpdateFuel"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="Add"
-                android:textColor="#EDE8E8"
-                android:textSize="18sp"/>
-
-            <Button
-                android:id="@+id/btnUpdateFuelOwner"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="Update"
@@ -189,7 +178,7 @@
                 android:textSize="18sp"/>
 
             <Button
-                android:id="@+id/btnBackAddFuel"
+                android:id="@+id/btnBackUpdateFuel"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_marginLeft="10dp"

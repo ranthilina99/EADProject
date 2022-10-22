@@ -47,13 +47,14 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="0dp"
+                android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="24dp"
                 android:text="My Dashboard"
                 android:textColor="@color/darkblue"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +63,7 @@
             <TextView
                 android:id="@+id/textViewDashboardUser"
                 android:layout_width="0dp"
+                android:textAllCaps="true"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
@@ -110,12 +112,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
+                            android:textAllCaps="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="35dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:text="Fuel    Details"
-                            android:textSize="30dp" />
+                            android:textSize="25dp" />
 
                         <!--                    <ImageView-->
                         <!--                        android:id="@+id/bus"-->
@@ -148,9 +151,10 @@
                             android:textColor="@color/white"
                             android:layout_marginTop="30dp"
                             android:textStyle="bold"
+                            android:textAllCaps="true"
                             android:textAlignment="center"
                             android:text="Queue Details"
-                            android:textSize="30dp" />
+                            android:textSize="25dp" />
 
                         <!--                    <ImageView-->
                         <!--                        android:id="@+id/imageView3"-->
@@ -195,8 +199,9 @@
                             android:layout_marginTop="25dp"
                             android:text="Fuel   Station"
                             android:textAlignment="center"
+                            android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="30dp"
+                            android:textSize="25dp"
                             android:textStyle="bold" />
 
                         <!--                    <ImageView-->
@@ -226,11 +231,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="25dp"
                             android:text="User    Profile"
+                            android:textAllCaps="true"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="30dp"
+                            android:textSize="25dp"
                             android:textStyle="bold" />
 
                         <!--                    <ImageView-->

@@ -24,8 +24,9 @@
         android:fontFamily="sans-serif-black"
         android:text="View Fuel Details"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textColor="@color/darkblue"
-        android:textSize="40dp"/>
+        android:textSize="30dp"/>
 
     <TextView
         android:layout_width="match_parent"

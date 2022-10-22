@@ -28,10 +28,10 @@ public class Register extends AppCompatActivity {
 
     private TextView textView,sigin;
     private EditText editTextName,editTextEmail,editTextMobile,editTextVehicleNo1,editTextVehicleNo2,
-            editTextCity,editTextAddress,editTextStationName,editTextStationNo,editTextPassword,editTextRetypepassowrd;
-    private Spinner spinnerRole,spinnerVehicelType,spinnerFuelType,spinner4;
+            editTextAddress,editTextStationName,editTextStationNo,editTextPassword,editTextRetypepassowrd;
+    private Spinner spinnerRole,spinnerVehicelType,spinnerFuelType,editTextCity;
     private Button button;
-    private String roleType,fuelType,vehicleType;
+    private String roleType,fuelType,vehicleType,cityType;
     private String name,email,mobile,vehicleNo1,vehicleNo2,city,address,stationName,stationNo,vehicleTypeAdd,fuelTypeAdd,password,rePassword,role;
     private LinearLayout layout1, layout2;
     SQLiteDatabase sqLiteDatabaseObj;
@@ -81,7 +81,6 @@ public class Register extends AppCompatActivity {
                     layout1.setVisibility(View.VISIBLE);
                     editTextVehicleNo1.setText(null);
                     editTextVehicleNo2.setText(null);
-                    editTextCity.setText(null);
                     editTextAddress.setText(null);
                     editTextStationName.setText(null);
                     editTextStationNo.setText(null);
@@ -90,7 +89,6 @@ public class Register extends AppCompatActivity {
                     layout2.setVisibility(View.VISIBLE);
                     editTextVehicleNo1.setText(null);
                     editTextVehicleNo2.setText(null);
-                    editTextCity.setText(null);
                     editTextAddress.setText(null);
                     editTextStationName.setText(null);
                     editTextStationNo.setText(null);
@@ -99,7 +97,6 @@ public class Register extends AppCompatActivity {
                     layout2.setVisibility(View.GONE);
                     editTextVehicleNo1.setText(null);
                     editTextVehicleNo2.setText(null);
-                    editTextCity.setText(null);
                     editTextAddress.setText(null);
                     editTextStationName.setText(null);
                     editTextPassword.setText(null);
@@ -149,6 +146,22 @@ public class Register extends AppCompatActivity {
 
             }
         });
+
+        editTextCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cityType = adapterView.getItemAtPosition(i).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(this, R.array.cityType, android.R.layout.simple_spinner_item);
+        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editTextCity.setAdapter(adapter4);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,7 +229,6 @@ public class Register extends AppCompatActivity {
         editTextMobile.getText().clear();
         editTextVehicleNo1.getText().clear();
         editTextVehicleNo2.getText().clear();
-        editTextCity.getText().clear();
         editTextAddress.getText().clear();
         editTextStationName.getText().clear();
         editTextStationNo.getText().clear();
@@ -230,7 +242,7 @@ public class Register extends AppCompatActivity {
          mobile = editTextMobile.getText().toString();
          vehicleNo1 = editTextVehicleNo1.getText().toString();
          vehicleNo2 = editTextVehicleNo2.getText().toString();
-         city = editTextCity.getText().toString();
+         city = cityType;
          address = editTextAddress.getText().toString();
          stationName = editTextStationName.getText().toString();
          stationNo = editTextStationNo.getText().toString();

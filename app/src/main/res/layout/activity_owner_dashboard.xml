@@ -45,6 +45,7 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="0dp"
+            android:textAllCaps="true"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -119,9 +120,10 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="25dp"
                         android:text="Add Fuel Details"
+                        android:textAllCaps="true"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="30dp"
+                        android:textSize="25dp"
                         android:textStyle="bold" />
 
                     <!--                    <ImageView-->
@@ -153,9 +155,10 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="25dp"
                         android:text="Owner Profile"
+                        android:textAllCaps="true"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="30dp"
+                        android:textSize="25dp"
                         android:textStyle="bold" />
 
                     <!--                    <ImageView-->
