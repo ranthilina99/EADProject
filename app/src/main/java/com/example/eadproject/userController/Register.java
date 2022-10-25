@@ -2,6 +2,7 @@ package com.example.eadproject.userController;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,11 +19,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class Register extends AppCompatActivity {
 
@@ -40,6 +61,7 @@ public class Register extends AppCompatActivity {
     Boolean EditTextEmptyHolder;
     String F_Result = "Not_Found";
     Cursor cursor;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +88,9 @@ public class Register extends AppCompatActivity {
         sigin = findViewById(R.id.txtsigiin);
 
         DB = new DBHelper(this);
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        handleSSLHandshake();
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.role, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -166,8 +191,6 @@ public class Register extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 SQLiteDataBaseBuild();
                 // Creating SQLite table if dose n't exists.
                 SQLiteTableBuild();
@@ -237,20 +260,20 @@ public class Register extends AppCompatActivity {
     // Method to check EditText is empty or Not.
     public void CheckEditTextStatus(){
         // Getting value from All EditText and storing into String Variables.
-         name = editTextName.getText().toString();
-         email = editTextEmail.getText().toString();
-         mobile = editTextMobile.getText().toString();
-         vehicleNo1 = editTextVehicleNo1.getText().toString();
-         vehicleNo2 = editTextVehicleNo2.getText().toString();
-         city = cityType;
-         address = editTextAddress.getText().toString();
-         stationName = editTextStationName.getText().toString();
-         stationNo = editTextStationNo.getText().toString();
-         vehicleTypeAdd = vehicleType;
-         fuelTypeAdd = fuelType;
-         password = editTextPassword.getText().toString();
-         rePassword = editTextRetypepassowrd.getText().toString();
-         role = roleType;
+        name = editTextName.getText().toString();
+        email = editTextEmail.getText().toString();
+        mobile = editTextMobile.getText().toString();
+        vehicleNo1 = editTextVehicleNo1.getText().toString();
+        vehicleNo2 = editTextVehicleNo2.getText().toString();
+        city = cityType;
+        address = editTextAddress.getText().toString();
+        stationName = editTextStationName.getText().toString();
+        stationNo = editTextStationNo.getText().toString();
+        vehicleTypeAdd = vehicleType;
+        fuelTypeAdd = fuelType;
+        password = editTextPassword.getText().toString();
+        rePassword = editTextRetypepassowrd.getText().toString();
+        role = roleType;
 
         if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
             EditTextEmptyHolder = false ;
@@ -288,7 +311,65 @@ public class Register extends AppCompatActivity {
         else {
             // If email already dose n't exists then user registration details will entered to SQLite database.
             InsertDataIntoSQLiteDatabase();
+            RegisterMongodb();
         }
         F_Result = "Not_Found" ;
+    }
+
+    private void RegisterMongodb() {
+        System.out.println("inside on click");
+        String url = "https://192.168.202.134:44323/api/station/FuelStation";
+        String obj = "{'name': '" + stationName + "', 'address': '" + address + "','ownerId': '" + email + "','stationNo': '" + stationNo + "' ,'city': '" + cityType + "'}";
+
+        System.out.println(obj);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                System.out.println(response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println(volleyError.toString());
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    @SuppressLint("TrulyRandom")
+    public static void handleSSLHandshake() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String arg0, SSLSession arg1) {
+                    return true;
+                }
+            });
+        } catch (Exception ignored) {
+        }
     }
 }
