@@ -21,9 +21,13 @@ import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.OwnerController.OwnerDashboard;
 import com.example.eadproject.R;
 import com.example.eadproject.UserDashboard.Dashboard;
+/*
+ *  This is view user profile page
+ * */
 
 public class UserProfile extends AppCompatActivity {
 
+    //create variables
     private EditText fullnameEditText,emailEditText,mobileEditText,
             roleEditText,vehicleNoEditText,vehicleTypeEditText,fuelTypeEditText;
     private SQLiteDatabase sqLiteDatabaseObj;
@@ -39,9 +43,11 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        //get the  station,fuel,city values
         email = getIntent().getStringExtra("email");
         id = getIntent().getStringExtra("id");
 
+        //assign the  variables ids
         fullnameEditText = findViewById(R.id.UserProfileName);
         emailEditText = findViewById(R.id.UserProfileEmail);
         mobileEditText = findViewById(R.id.UserProfileMobile);
@@ -53,6 +59,7 @@ public class UserProfile extends AppCompatActivity {
         delete = findViewById(R.id.btnUserProfileDelete);
         layout = findViewById(R.id.userProfileRefresh);
 
+        //set the disable fields
         emailEditText.setEnabled(false);
         roleEditText.setEnabled(false);
         vehicleNoEditText.setEnabled(false);
@@ -60,8 +67,10 @@ public class UserProfile extends AppCompatActivity {
         fuelTypeEditText.setEnabled(false);
         builder = new AlertDialog.Builder(this);
 
+        //this is new DBHelper in this page
         DB = new DBHelper(this);
 
+        //click the delete button for delete user
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +99,7 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
+        //refresh the layout
         layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -98,6 +108,7 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
+        //update the user details
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +129,7 @@ public class UserProfile extends AppCompatActivity {
         loadData();
     }
 
+    //update the user Sql Data
     private boolean updateData(String name, String mobile, String id) {
         ContentValues contentValues =  new ContentValues();
         contentValues.put(DBHelper.Table_Column_1_Name,name);
@@ -125,10 +137,12 @@ public class UserProfile extends AppCompatActivity {
         return sqLiteDatabaseObj.update(DBHelper.TABLE_NAME, contentValues, DBHelper.Table_Column_ID + "=?", new String[]{id})>0;
     }
 
+    //Delete the user Sql Data
     private boolean deleteData(String id) {
         return sqLiteDatabaseObj.delete(DBHelper.TABLE_NAME, DBHelper.Table_Column_ID + "=?", new String[]{id})>0;
     }
 
+    //Load the user Sql Data
     @SuppressLint("Range")
     private void loadData() {
         sqLiteDatabaseObj = DB.getWritableDatabase();

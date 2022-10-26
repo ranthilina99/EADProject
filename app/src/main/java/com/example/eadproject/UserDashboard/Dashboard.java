@@ -24,6 +24,10 @@ import com.example.eadproject.userController.UserProfile;
 
 import org.w3c.dom.Text;
 
+/*
+ *  This is  Dashboard page
+ * */
+
 public class Dashboard extends AppCompatActivity {
 
     private SwipeRefreshLayout layout;
@@ -51,6 +55,7 @@ public class Dashboard extends AppCompatActivity {
 
         DB = new DBHelper(this);
 
+        // this is the fuel view details card button
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +66,7 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // this is the queue details card button
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,16 +77,18 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // this is the fuel station card button
         card3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Dashboard.this, FuelStation.class);
                 // Sending Email to Dashboard Activity using intent.
-//                intent.putExtra("email", email);
-//                intent.putExtra("id", id);
+                intent.putExtra("email", email);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
+        // this is the profile card button
         card4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,6 +99,7 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //refresh data
         layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -98,7 +107,7 @@ public class Dashboard extends AppCompatActivity {
                 layout.setRefreshing(false);
             }
         });
-
+        //click the logout button
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

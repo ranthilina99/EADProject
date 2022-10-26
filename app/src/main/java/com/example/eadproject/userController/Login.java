@@ -19,8 +19,13 @@ import com.example.eadproject.OwnerController.OwnerDashboard;
 import com.example.eadproject.R;
 import com.example.eadproject.UserDashboard.Dashboard;
 
+/*
+ *  This is  Login page
+ * */
+
 public class Login extends AppCompatActivity {
 
+    //these are textview,editText, button and database variable;
     private TextView textView;
     private EditText editTextemail, editTextpassword;
     private Button button;
@@ -36,13 +41,16 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //these are variable assigned ids
         textView = findViewById(R.id.txtdonthaveacc);
         editTextemail = findViewById(R.id.loginemail);
         editTextpassword = findViewById(R.id.loginpassword);
         button = findViewById(R.id.btnlogin);
 
+        //there are new Sql lite db helper created
         DB = new DBHelper(this);
 
+        // click register textview  go to the register page
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,6 +59,8 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        // click login button checkEditTextStatus and Login function Called there are
+        // two role they are user and owner
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,11 +76,13 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    //this is the email and password clear
     private void EmptyEditTextAfterDataInsert() {
         editTextemail.getText().clear();
         editTextpassword.getText().clear();
     }
 
+    //this is the login function
     @SuppressLint("Range")
     private void LoginFunction() {
         if (EditTextEmptyHolder) {
@@ -88,7 +100,7 @@ public class Login extends AppCompatActivity {
                     cursor.close();
                 }
             }
-            // Calling method to check final result ..
+            // Calling method check final result
             CheckFinalResult();
         } else {
             //If any of login EditText empty then this block will be executed.
@@ -96,10 +108,22 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    //this is the check edit text status function
     public void CheckEditTextStatus() {
-        // Getting value from All EditText and storing into String Variables.
+
+        //validation and get the value edit text in login page
         email = editTextemail.getText().toString();
         password = editTextpassword.getText().toString();
+        String passwordVal = "^" +
+                //"(?=.*[0-9])" +         //at least 1 digit
+                //"(?=.*[a-z])" +         //at least 1 lower case letter
+                //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                "(?=.*[a-zA-Z])" +      //any letter
+                "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                "(?=\\S+$)" +           //no white spaces
+                ".{4,}" +               //at least 4 characters
+                "$";
+
         // Checking EditText is empty or no using TextUtils.
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             EditTextEmptyHolder = false;

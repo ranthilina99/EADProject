@@ -45,19 +45,24 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+/*
+ *  This is  Register page
+ * */
+
 public class Register extends AppCompatActivity {
 
-    private TextView textView,sigin;
-    private EditText editTextName,editTextEmail,editTextMobile,editTextVehicleNo1,editTextVehicleNo2,
-            editTextAddress,editTextStationName,editTextStationNo,editTextPassword,editTextRetypepassowrd;
-    private Spinner spinnerRole,spinnerVehicelType,spinnerFuelType,editTextCity;
+    //these are variable;
+    private TextView textView, sigin;
+    private EditText editTextName, editTextEmail, editTextMobile, editTextVehicleNo1, editTextVehicleNo2,
+            editTextAddress, editTextStationName, editTextStationNo, editTextPassword, editTextRetypepassowrd;
+    private Spinner spinnerRole, spinnerVehicelType, spinnerFuelType, editTextCity;
     private Button button;
-    private String roleType,fuelType,vehicleType,cityType;
-    private String name,email,mobile,vehicleNo1,vehicleNo2,city,address,stationName,stationNo,vehicleTypeAdd,fuelTypeAdd,password,rePassword,role;
+    private String roleType, fuelType, vehicleType, cityType;
+    private String name, email, mobile, vehicleNo1, vehicleNo2, city, address, stationName, stationNo, vehicleTypeAdd, fuelTypeAdd, password, rePassword, role;
     private LinearLayout layout1, layout2;
     SQLiteDatabase sqLiteDatabaseObj;
     DBHelper DB;
-    String SQLiteDataBaseQueryHolder ;
+    String SQLiteDataBaseQueryHolder;
     Boolean EditTextEmptyHolder;
     String F_Result = "Not_Found";
     Cursor cursor;
@@ -68,6 +73,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //these are variable assigned ids
         editTextName = findViewById(R.id.registerfullName);
         editTextEmail = findViewById(R.id.registeremail);
         editTextMobile = findViewById(R.id.registermobile);
@@ -87,21 +93,27 @@ public class Register extends AppCompatActivity {
         button = findViewById(R.id.btnregcreateaccount);
         sigin = findViewById(R.id.txtsigiin);
 
+        //there are new Sql lite db helper created
         DB = new DBHelper(this);
+
+        //this is request queue backend volley library
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        //this is handle SSL handshake
         handleSSLHandshake();
 
+        //this is assign the role user and owner in spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.role, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRole.setAdapter(adapter);
 
+        //according to select role empty fields
         spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 roleType = adapterView.getItemAtPosition(i).toString();
 
-                if( roleType.equals("User")){
+                if (roleType.equals("User")) {
                     layout2.setVisibility(View.GONE);
                     layout1.setVisibility(View.VISIBLE);
                     editTextVehicleNo1.setText(null);
@@ -109,7 +121,7 @@ public class Register extends AppCompatActivity {
                     editTextAddress.setText(null);
                     editTextStationName.setText(null);
                     editTextStationNo.setText(null);
-                }else if(roleType.equals("Owner")){
+                } else if (roleType.equals("Owner")) {
                     layout1.setVisibility(View.GONE);
                     layout2.setVisibility(View.VISIBLE);
                     editTextVehicleNo1.setText(null);
@@ -117,7 +129,7 @@ public class Register extends AppCompatActivity {
                     editTextAddress.setText(null);
                     editTextStationName.setText(null);
                     editTextStationNo.setText(null);
-                }else if(roleType.equals("Choose")){
+                } else if (roleType.equals("Choose")) {
                     layout1.setVisibility(View.GONE);
                     layout2.setVisibility(View.GONE);
                     editTextVehicleNo1.setText(null);
@@ -128,11 +140,13 @@ public class Register extends AppCompatActivity {
                     editTextStationNo.setText(null);
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
+        //click the sign in button
         sigin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,10 +154,12 @@ public class Register extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //this is assign the vehicle type in spinner
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.vehicleType, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerVehicelType.setAdapter(adapter1);
 
+        //vehicle type spinner select the items
         spinnerVehicelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -156,10 +172,12 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        //this is assign the fuel type in spinner
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFuelType.setAdapter(adapter2);
 
+        //Fuel type spinner select the items
         spinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -172,6 +190,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        // edit text city spinner 
         editTextCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -184,10 +203,12 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        //this is assign the city in spinner
         ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(this, R.array.cityType, android.R.layout.simple_spinner_item);
         adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         editTextCity.setAdapter(adapter4);
 
+        //click the register button call the sqllite function and swagger function
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,10 +225,12 @@ public class Register extends AppCompatActivity {
         });
     }
 
-    public void SQLiteDataBaseBuild(){
+    // Method to check  table SQLiteDataBaseBuild
+    public void SQLiteDataBaseBuild() {
         sqLiteDatabaseObj = openOrCreateDatabase(DBHelper.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }
 
+    // Method to check create a table sqlLite db
     public void SQLiteTableBuild() {
         sqLiteDatabaseObj.execSQL("CREATE TABLE IF NOT EXISTS "
                 + DBHelper.TABLE_NAME
@@ -227,26 +250,27 @@ public class Register extends AppCompatActivity {
                 + DBHelper.Table_Column_13_Password + " VARCHAR);");
     }
 
-    public void InsertDataIntoSQLiteDatabase(){
+    public void InsertDataIntoSQLiteDatabase() {
         // If editText is not empty then this block will executed.
-        if(EditTextEmptyHolder == true)
-        {
+        if (EditTextEmptyHolder == true) {
             // SQLite query to insert data into table.
-            SQLiteDataBaseQueryHolder = "INSERT INTO " +DBHelper.TABLE_NAME +" (name,email,mobileNo,vehicleNo1,vehicleNo2,city,address,stationName,stationNo,vehicleType,fuelType,role,password) VALUES('" +name +"', '" +email +"', '" +mobile +"', '" +vehicleNo1 +"', '" +vehicleNo2 +"', '" +city +"', '" +address +"', '" +stationName +"', '" +stationNo +"', '" +vehicleType +"', '" +fuelType +"', '" +role +"', '" +password +"');";
+            SQLiteDataBaseQueryHolder = "INSERT INTO " + DBHelper.TABLE_NAME + " (name,email,mobileNo,vehicleNo1,vehicleNo2,city,address,stationName,stationNo,vehicleType,fuelType,role,password) VALUES('" + name + "', '" + email + "', '" + mobile + "', '" + vehicleNo1 + "', '" + vehicleNo2 + "', '" + city + "', '" + address + "', '" + stationName + "', '" + stationNo + "', '" + vehicleType + "', '" + fuelType + "', '" + role + "', '" + password + "');";
             // Executing query.
             sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
             // Closing SQLite database object.
             sqLiteDatabaseObj.close();
             // Printing toast message after done inserting.
-            Toast.makeText(Register.this,"User Registered Successfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(Register.this, "User Registered Successfully", Toast.LENGTH_LONG).show();
         }
         // This block will execute if any of the registration EditText is empty.
         else {
             // Printing toast message if any of EditText is empty.
-            Toast.makeText(Register.this,"Please Fill All The Required Fields.", Toast.LENGTH_LONG).show();
+            Toast.makeText(Register.this, "Please Fill All The Required Fields.", Toast.LENGTH_LONG).show();
         }
     }
-    public void EmptyEditTextAfterDataInsert(){
+
+    // Method to check EditText is empty.
+    public void EmptyEditTextAfterDataInsert() {
         editTextName.getText().clear();
         editTextEmail.getText().clear();
         editTextMobile.getText().clear();
@@ -257,8 +281,9 @@ public class Register extends AppCompatActivity {
         editTextStationNo.getText().clear();
         editTextPassword.getText().clear();
     }
+
     // Method to check EditText is empty or Not.
-    public void CheckEditTextStatus(){
+    public void CheckEditTextStatus() {
         // Getting value from All EditText and storing into String Variables.
         name = editTextName.getText().toString();
         email = editTextEmail.getText().toString();
@@ -274,16 +299,90 @@ public class Register extends AppCompatActivity {
         password = editTextPassword.getText().toString();
         rePassword = editTextRetypepassowrd.getText().toString();
         role = roleType;
-
-        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
-            EditTextEmptyHolder = false ;
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please fill the filed", Toast.LENGTH_SHORT).show();
+            EditTextEmptyHolder = false;
+        } else {
+            EditTextEmptyHolder = true;
         }
-        else {
-            EditTextEmptyHolder = true ;
-        }
+        //validation
+//       if(!role.equals("User") || !role.equals("Owner")){
+//           Toast.makeText(this, "Please select the role", Toast.LENGTH_SHORT).show();
+//           if(TextUtils.isEmpty(role)){
+//               String passwordVal = "^" +
+//                       //"(?=.*[0-9])" +         //at least 1 digit
+//                       //"(?=.*[a-z])" +         //at least 1 lower case letter
+//                       //"(?=.*[A-Z])" +         //at least 1 upper case letter
+//                       "(?=.*[a-zA-Z])" +      //any letter
+//                       "(?=.*[@#$%^&+=])" +    //at least 1 special character
+//                       "(?=\\S+$)" +           //no white spaces
+//                       ".{4,}" +               //at least 4 characters
+//                       "$";
+//
+//               Toast.makeText(this, "Please select the role", Toast.LENGTH_SHORT).show();
+//               if(role.equals("User")){
+//                   if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)
+//                           || TextUtils.isEmpty(vehicleNo1) || TextUtils.isEmpty(mobile) || TextUtils.isEmpty(vehicleTypeAdd)
+//                           || TextUtils.isEmpty(fuelTypeAdd)){
+//                       Toast.makeText(this, "Please fill the filed", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+//                       EditTextEmptyHolder = false ;
+//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+//                   } else if(!mobile.matches("[0-9]{10}")){
+//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!mobile.matches("[0-9]{10}")){
+//                       Toast.makeText(this, "Please enter correct mobile", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!password.matches(passwordVal)){
+//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!rePassword.matches(password)){
+//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }
+//                   else {
+//                       EditTextEmptyHolder = true ;
+//                   }
+//               }else if(role.equals("Owner")){
+//                   String passwordVal1 = "^" +
+//                           //"(?=.*[0-9])" +         //at least 1 digit
+//                           //"(?=.*[a-z])" +         //at least 1 lower case letter
+//                           //"(?=.*[A-Z])" +         //at least 1 upper case letter
+//                           "(?=.*[a-zA-Z])" +      //any letter
+//                           "(?=.*[@#$%^&+=])" +    //at least 1 special character
+//                           "(?=\\S+$)" +           //no white spaces
+//                           ".{4,}" +               //at least 4 characters
+//                           "$";
+//                   if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)
+//                           || TextUtils.isEmpty(city) || TextUtils.isEmpty(address)
+//                           || TextUtils.isEmpty(stationName) || TextUtils.isEmpty(stationNo)){
+//                       Toast.makeText(this, "Please fill the filed", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+//                       EditTextEmptyHolder = false ;
+//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+//                   } else if(!mobile.matches("[0-9]{10}")){
+//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!password.matches(passwordVal1)){
+//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }else if(!rePassword.matches(password)){
+//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+//                       EditTextEmptyHolder = false ;
+//                   }
+//                   else {
+//                       EditTextEmptyHolder = true ;
+//                   }
+//               }
+//           }
+//       }
     }
+
     // Checking Email is already exists or not.
-    public void CheckingEmailAlreadyExistsOrNot(){
+    public void CheckingEmailAlreadyExistsOrNot() {
         // Opening SQLite database write permission.
         sqLiteDatabaseObj = DB.getWritableDatabase();
         // Adding search email query to cursor.
@@ -300,22 +399,22 @@ public class Register extends AppCompatActivity {
         // Calling method to check final result and insert data into SQLite database.
         CheckFinalResult();
     }
+
     // Checking result
-    public void CheckFinalResult(){
+    public void CheckFinalResult() {
         // Checking whether email is already exists or not.
-        if(F_Result.equalsIgnoreCase("Email Found"))
-        {
+        if (F_Result.equalsIgnoreCase("Email Found")) {
             // If email is exists then toast msg will display.
-            Toast.makeText(Register.this,"Email Already Exists",Toast.LENGTH_LONG).show();
-        }
-        else {
+            Toast.makeText(Register.this, "Email Already Exists", Toast.LENGTH_LONG).show();
+        } else {
             // If email already dose n't exists then user registration details will entered to SQLite database.
             InsertDataIntoSQLiteDatabase();
             RegisterMongodb();
         }
-        F_Result = "Not_Found" ;
+        F_Result = "Not_Found";
     }
 
+    //create a mongodb post api call
     private void RegisterMongodb() {
         System.out.println("inside on click");
         String url = "https://192.168.202.134:44323/api/station/FuelStation";
@@ -329,7 +428,7 @@ public class Register extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 System.out.println(response.toString());
@@ -343,6 +442,7 @@ public class Register extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    //This is the handle  SSL Handshake Function
     @SuppressLint("TrulyRandom")
     public static void handleSSLHandshake() {
         try {

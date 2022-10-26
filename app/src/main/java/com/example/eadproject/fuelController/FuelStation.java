@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,11 @@ import org.json.JSONObject;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -38,41 +44,53 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+/*
+ *  This is  Fuel Station page
+ * */
 
 public class FuelStation extends AppCompatActivity {
 
-    private Spinner spinnerFuelStation,spinnerFuelType,spinnerFuelCity;
-    private String fuelType,city,station;
+    private Spinner spinnerFuelStation, spinnerFuelType, spinnerFuelCity;
+    private String fuelType, city, station,email,id;
     private Button nextButton;
     private EditText time;
     String res = "";
-    ArrayList<String> spinnerArray;
+    ArrayList<String> spinnerArray = new ArrayList<>();
+    ArrayList<String> spinnerArray2 = new ArrayList<>();
+    ArrayAdapter<String> adapter1, adapter3;
+    ArrayList<String> newList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuel_station);
 
+        //get the  station,fuel,city values
+        email = getIntent().getStringExtra("email");
+        id = getIntent().getStringExtra("id");
+
+        //assign the ids for variables
         spinnerFuelStation = findViewById(R.id.spinnerViewStationUserFuelStation);
         spinnerFuelType = findViewById(R.id.spinnerViewStationUserFuelType);
         spinnerFuelCity = findViewById(R.id.spinnerViewStationUserCity);
-        nextButton= findViewById(R.id.btnFuelStationNext);
-        time= findViewById(R.id.textAddFuelStationArrivalTimeOwner);
-//
-//        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
-//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerFuelType.setAdapter(adapter2);
-//
-//        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
-//                (this, android.R.layout.simple_spinner_item,
-//                        spinnerArray); //selected item will look like a spinner set from XML
-//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
-//                .simple_spinner_dropdown_item);
-//        spinnerFuelCity.setAdapter(spinnerArrayAdapter);
+        nextButton = findViewById(R.id.btnFuelStationNext);
+        time = findViewById(R.id.textAddFuelStationArrivalTimeOwner);
 
+        //this is the fuel type spinner
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFuelType.setAdapter(adapter2);
+
+//        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+//
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //this is the city type spinner adapter
+        adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+        //this is the station type spinner adapter
+        adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray2);
 
         handleSSLHandshake();
-
 
         System.out.println("inside on click");
         String url = "https://192.168.202.134:44323/api/station/FuelStation";
@@ -80,23 +98,33 @@ public class FuelStation extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("inside res");
-                System.out.println(response.toString());
+                //System.out.println(response.toString());
                 res = response.toString();
 
-
                 try {
-                    for (int i = 0 ; i<response.length() ; i++){
-                        JSONObject object =  response.getJSONObject(i);
-
-                        System.out.println(object.get("city"));
-//                        spinnerArray.add((String) object.get("city"));
-//                        System.out.println(spinnerArray);
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject object = response.getJSONObject(i);
+                        String obj = object.getString("city");
+                        spinnerArray.add(obj);
+                        //System.out.println(spinnerArray);
                     }
+                    // convert the arraylist into a set
+                    Set<String> set = new LinkedHashSet<>();
+                    set.addAll(spinnerArray);
+
+                    // delete al elements of arraylist
+                    spinnerArray.clear();
+
+                    // add element from set to arraylist
+                    spinnerArray.addAll(set);
+                    //newList = removeDuplicates(spinnerArray);
+
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerFuelCity.setAdapter(adapter1);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -108,10 +136,12 @@ public class FuelStation extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(jsonArrayRequest);
 
+
         spinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 fuelType = adapterView.getItemAtPosition(i).toString();
+                System.out.println(adapterView.getItemAtPosition(i).toString());
             }
 
             @Override
@@ -120,21 +150,99 @@ public class FuelStation extends AppCompatActivity {
             }
         });
 
+        spinnerFuelStation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                station = adapterView.getItemAtPosition(i).toString();
+                System.out.println(adapterView.getItemAtPosition(i).toString());
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        spinnerFuelCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                city = adapterView.getItemAtPosition(i).toString();
+                spinnerArray2.clear();
+                System.out.println(city);
+                System.out.println("inside on click");
+                String url1 = "https://192.168.202.134:44323/api/station/FuelStation/GetStationCity?city=" + city;
+                JsonArrayRequest jsonArrayRequestStation = new JsonArrayRequest(Request.Method.GET, url1, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        System.out.println("Station res");
+                        //System.out.println(response.toString());
+                        res = response.toString();
+
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject object = response.getJSONObject(i);
+                                String obj = object.getString("name");
+                                spinnerArray2.add(obj);
+                                System.out.println(spinnerArray2);
+                            }
+                            Set<String> set = new LinkedHashSet<>();
+                            set.addAll(spinnerArray2);
+
+                            // delete al elements of arraylist
+                            spinnerArray2.clear();
+
+                            // add element from set to arraylist
+                            spinnerArray2.addAll(set);
+                            //newList = removeDuplicates(spinnerArray);
+                            adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerFuelStation.setAdapter(adapter3);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        System.out.println(volleyError.toString());
+                    }
+                });
+
+                RequestQueue requestQueueStation = Volley.newRequestQueue(getApplicationContext());
+                requestQueueStation.add(jsonArrayRequestStation);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getApplicationContext(), ViewLengthQueue.class);
-//                startActivity(intent);
-
-
+                checkValidataion(station,fuelType,city);
 
             }
         });
 
     }
+
+    private void checkValidataion(String station1, String fuelType1, String city1) {
+        System.out.println(fuelType1);
+        if(station1.equals("") || station1.equals(null) || fuelType1.equals("") || fuelType1.equals(null) || city1.equals(null) || fuelType1.matches("Choose")){
+            Toast.makeText(this, "Please Select the items", Toast.LENGTH_SHORT).show();
+        }else{
+            Intent intent = new Intent(getApplicationContext(), ViewLengthQueue.class);
+            intent.putExtra("station",station1);
+            intent.putExtra("fuelType", fuelType1);
+            intent.putExtra("city", city1);
+            intent.putExtra("email", email);
+            intent.putExtra("id", id);
+            startActivity(intent);
+        }
+    }
+
 
     @SuppressLint("TrulyRandom")
     public static void handleSSLHandshake() {
