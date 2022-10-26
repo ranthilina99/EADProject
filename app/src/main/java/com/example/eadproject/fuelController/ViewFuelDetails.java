@@ -15,7 +15,9 @@ import android.widget.TextView;
 import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.QueueController.ViewLengthQueue;
 import com.example.eadproject.R;
-
+/*
+ *  This is  view Details page
+ * */
 public class ViewFuelDetails extends AppCompatActivity {
 
     private String station, fuel, city;

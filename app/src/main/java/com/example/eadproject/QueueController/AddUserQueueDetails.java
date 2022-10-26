@@ -21,6 +21,10 @@ import com.example.eadproject.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/*
+ *  This is Add user queue Details page
+ * */
+
 public class AddUserQueueDetails extends AppCompatActivity {
 
     private EditText text1,text2;

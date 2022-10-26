@@ -45,6 +45,10 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+/*
+ *  This is Add fuel details page
+ * */
+
 public class AddFuelDetailsOwner extends AppCompatActivity {
 
     private Spinner spinnerFuelType, spinnerFinish;

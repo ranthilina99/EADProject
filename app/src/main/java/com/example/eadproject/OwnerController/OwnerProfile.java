@@ -21,6 +21,10 @@ import com.example.eadproject.R;
 import com.example.eadproject.userController.Login;
 import com.example.eadproject.userController.UserProfile;
 
+/*
+ *  This is owner profile page
+ * */
+
 public class OwnerProfile extends AppCompatActivity {
 
     private EditText fullnameEditText, emailEditText, mobileEditText,

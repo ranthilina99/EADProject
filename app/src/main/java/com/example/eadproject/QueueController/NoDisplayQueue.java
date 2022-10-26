@@ -6,6 +6,10 @@ import android.os.Bundle;
 
 import com.example.eadproject.R;
 
+/*
+ *  This is No queue details page
+ * */
+
 public class NoDisplayQueue extends AppCompatActivity {
 
     @Override

@@ -12,6 +12,10 @@ import android.widget.TextView;
 import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.R;
 
+/*
+ *  This is User View Queue All details Page
+ * */
+
 public class UserViewQueueAllDetails extends AppCompatActivity {
 
     private TextView name,vehicleType, vehicleNo, fuelType;

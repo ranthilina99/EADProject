@@ -13,6 +13,10 @@ import android.widget.Spinner;
 import com.example.eadproject.R;
 import com.example.eadproject.UserDashboard.Dashboard;
 
+/*
+ *  This is  view Fuel station details page
+ * */
+
 public class ViewFuelStationDetails extends AppCompatActivity {
 
     private Spinner spinnerFuelStation,spinnerFuelType;

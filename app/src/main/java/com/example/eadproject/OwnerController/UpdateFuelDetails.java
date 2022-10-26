@@ -37,6 +37,10 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+/*
+ *  This is update fuel details page
+ * */
+
 public class UpdateFuelDetails extends AppCompatActivity {
 
     private EditText editName,editStationNo,editArrivalTime;
