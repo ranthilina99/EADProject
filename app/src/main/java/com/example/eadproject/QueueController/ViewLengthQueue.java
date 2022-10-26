@@ -48,7 +48,7 @@ public class ViewLengthQueue extends AppCompatActivity {
 
     //create variables
     private Button enterButton, viewDetailButton;
-    private String station, fuel, city, email, id,vehicleType;
+    private String station, fuel, city, email, id,vehicleType,lengthQueue,QueueId;
     private EditText length, average;
     private SQLiteDatabase sqLiteDatabaseObj;
     private Cursor cursor;
@@ -82,6 +82,7 @@ public class ViewLengthQueue extends AppCompatActivity {
         //this is request queue backend volley library
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        lengthQueue = length.getText().toString();
         //this is handle SSL handshake
         handleSSLHandshake();
 
@@ -103,6 +104,7 @@ public class ViewLengthQueue extends AppCompatActivity {
 
         //load the sal data
         loadData();
+
         //add queue string request
         queue.add(stringRequest);
 
@@ -145,6 +147,11 @@ public class ViewLengthQueue extends AppCompatActivity {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url3, jsonObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        try {
+                            QueueId = response.getString("queueId").toString();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println(response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -154,6 +161,9 @@ public class ViewLengthQueue extends AppCompatActivity {
                     }
                 });
                 requestQueue.add(jsonObjectRequest);
+                intent.putExtra("station", station);
+                intent.putExtra("id", id);
+                intent.putExtra("queueId", QueueId);
                 startActivity(intent);
             }
         });
