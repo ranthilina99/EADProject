@@ -211,11 +211,13 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
             }
         });
 
-
+        //click the update button in add fuel details
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), UpdateFuelDetails.class);
+                intent.putExtra("email", email);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
