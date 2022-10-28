@@ -52,7 +52,7 @@
             android:layout_marginTop="24dp"
             android:text="My Dashboard"
             android:textColor="@color/darkblue"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />

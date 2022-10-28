@@ -28,8 +28,7 @@ import com.example.eadproject.userController.UserProfile;
 public class OwnerProfile extends AppCompatActivity {
 
     private EditText fullnameEditText, emailEditText, mobileEditText,
-            roleEditText, StationNameEditText, StationNoEditText, cityEditText, addressEditText;
-    ;
+            roleEditText, StationNameEditText, StationNoEditText, cityEditText, addressEditText;;
     private SQLiteDatabase sqLiteDatabaseObj;
     private Cursor cursor;
     private String email, id;
@@ -89,7 +88,6 @@ public class OwnerProfile extends AppCompatActivity {
                 }).show();
             }
         });
-
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override

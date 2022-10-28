@@ -179,12 +179,12 @@
                 android:textSize="18sp"/>
 
             <Button
-                android:id="@+id/btnUpdateFuelOwner"
+                android:id="@+id/btnViewFuelOwner"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="Update"
+                android:text="View Details"
                 android:textColor="#EDE8E8"
                 android:textSize="18sp"/>
 

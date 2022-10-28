@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +31,8 @@ import org.json.JSONObject;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -43,52 +47,39 @@ import javax.net.ssl.X509TrustManager;
 
 public class UpdateFuelDetails extends AppCompatActivity {
 
-    private EditText editName,editStationNo,editArrivalTime;
-    private Spinner spinnerFuelType, spinnerFinish;
-    private Button button,back;
+    private EditText editName, editStationNo, editArrivalTime, FuelType;
+    private Spinner spinnerFinish;
+    private Button button, back;
     private RequestQueue requestQueue1;
-    private String fuelType,finishStatus;
+    private String fuelType, finishStatus;
     private Boolean status;
-    private String email, id, fdId;
+    private String email, StationId, fuelId, fuelStatus, fuelName, fuelStatus1;
+    private TextView textView;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_fuel_details);
 
         //assign the ids
-        spinnerFuelType = findViewById(R.id.spinnerUpdateFuelTypeOwner);
+        FuelType = findViewById(R.id.spinnerUpdateFuelTypeOwner);
         spinnerFinish = findViewById(R.id.spinnerUpdateFuelFinishStatusOwner);
         button = findViewById(R.id.btnUpdateFuel);
         back = findViewById(R.id.btnBackUpdateFuel);
         editName = findViewById(R.id.textUpdateFuelStationOwner);
         editStationNo = findViewById(R.id.textUpdateFuelStationNoOwner);
         editArrivalTime = findViewById(R.id.textUpdateFuelStationArrivalTimeOwner);
+        textView = findViewById(R.id.fuelStatusUpdate);
 
+        StationId = getIntent().getStringExtra("StationId");
+        fuelId = getIntent().getStringExtra("id");
+        fuelStatus = getIntent().getStringExtra("fuelfinish");
+        fuelName = getIntent().getStringExtra("fuelName");
         email = getIntent().getStringExtra("email");
-        id = getIntent().getStringExtra("id");
-
-        //set fuel details in spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFuelType.setAdapter(adapter);
 
         //this is request queue backend volley library
         requestQueue1 = Volley.newRequestQueue(getApplicationContext());
-
-        //get fuel details in spinner
-        spinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fuelType = adapterView.getItemAtPosition(i).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
 
         //set finish details in spinner
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.finishType, android.R.layout.simple_spinner_item);
@@ -101,9 +92,9 @@ public class UpdateFuelDetails extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 finishStatus = adapterView.getItemAtPosition(i).toString();
                 System.out.println(finishStatus);
-                if(finishStatus.equals("Yes")){
+                if (finishStatus.equals("Yes")) {
                     status = true;
-                }else{
+                } else {
                     status = false;
                 }
             }
@@ -117,23 +108,43 @@ public class UpdateFuelDetails extends AppCompatActivity {
         //this is handle SSL handshake
         handleSSLHandshake();
 
-        //backButton
+//        //backButton
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), OwnerDashboard.class);
+                Intent intent = new Intent(getApplicationContext(), ViewAllFuelDetails.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
             }
         });
 
-        //get the all FuelStation Details
+        editName.setEnabled(false);
+        editStationNo.setEnabled(false);
+
+        editArrivalTime.setEnabled(false);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        String time = dtf.format(now);
+        editArrivalTime.setText(time);
+
+        if (fuelStatus.equals("true")) {
+            fuelStatus1 = "Yes";
+        } else {
+            fuelStatus1 = "No";
+        }
+        textView.setText(fuelStatus1);
+
+        FuelType.setText(fuelName);
+
+//        //get the all FuelStation Details
         System.out.println("inside on click");
         String url = "https://192.168.202.134:44323/api/station/FuelStation";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("inside res");
-                //System.out.println(response.toString());
+                System.out.println(response.toString());
 //                res = response.toString();
 
                 try {
@@ -141,7 +152,7 @@ public class UpdateFuelDetails extends AppCompatActivity {
                         JSONObject object = response.getJSONObject(i);
                         String obj = object.getString("ownerId");
                         if (email.equals(obj)) {
-                            String name = object.getString("OwnerId");
+                            String name = object.getString("ownerId");
                             String stationNo = object.getString("stationNo");
                             editName.setText(name);
                             editStationNo.setText(stationNo);
@@ -162,39 +173,48 @@ public class UpdateFuelDetails extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
         //update fuelDetails
         button.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                System.out.println("inside on click");
-                String url = "https://192.168.202.134:44323/api/fuel/FuelDetails/" + email;
-                String obj = "{'StationId': '" + editName.getText().toString() + "', 'FuelName': '" + fuelType + "','FuelArrivalTime': '" + java.time.LocalDateTime.now() + "','FuelFinish': " + status + " }";
-
-                System.out.println(obj);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(finishStatus.matches("Choose")){
+                    Toast.makeText(UpdateFuelDetails.this, "Please Select the items", Toast.LENGTH_SHORT).show();
+                }else {
+                    updateFuelDetails();
                 }
+            }
+        });
+    }
 
-                JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(Request.Method.PUT, url, jsonObject, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        System.out.println(response.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        System.out.println(volleyError.toString());
-                    }
-                });
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateFuelDetails() {
+        System.out.println("inside on click");
+        String url = "https://192.168.202.134:44323/api/fuel/FuelDetails/" + fuelId;
+        String obj = "{'StationId': '" + StationId + "', 'FuelName': '" + fuelName + "','FuelArrivalTime': '" + java.time.LocalDateTime.now() + "','FuelFinish': " + status + " }";
 
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                requestQueue.add(jsonObjectRequest);
+        System.out.println(obj);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest1 = new JsonObjectRequest(Request.Method.PUT, url, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                System.out.println(response.toString());
+                Toast.makeText(UpdateFuelDetails.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println(volleyError.toString());
             }
         });
 
+        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+        requestQueue1.add(jsonObjectRequest1);
     }
+
 
     //This is the handle  SSL Handshake Function
     @SuppressLint("TrulyRandom")
