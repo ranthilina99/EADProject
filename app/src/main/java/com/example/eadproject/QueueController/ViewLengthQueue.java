@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.R;
+import com.example.eadproject.UserDashboard.Dashboard;
 import com.example.eadproject.fuelController.ViewFuelDetails;
 
 import org.json.JSONArray;
@@ -48,13 +51,14 @@ public class ViewLengthQueue extends AppCompatActivity {
 
     //create variables
     private Button enterButton, viewDetailButton;
-    private String station, fuel, city, email, id,vehicleType,lengthQueue,QueueId;
+    private String station, fuel, city, email, id, vehicleType, lengthQueue, QueueId, stationName;
     private EditText length, average;
     private SQLiteDatabase sqLiteDatabaseObj;
     private Cursor cursor;
     private RequestQueue requestQueue;
     DBHelper DB;
     String res = "";
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +70,36 @@ public class ViewLengthQueue extends AppCompatActivity {
         viewDetailButton = findViewById(R.id.btnViewDetailsQueue2);
         average = findViewById(R.id.avgTimeQueue);
         length = findViewById(R.id.lengthQueue);
-
-        //get the  station,fuel,city values
-        station = getIntent().getStringExtra("station");
-        fuel = getIntent().getStringExtra("fuelType");
-        city = getIntent().getStringExtra("city");
+        back = findViewById(R.id.imageViewViewQueueBack);
 
         //get the  station,fuel,city values
         email = getIntent().getStringExtra("email");
         id = getIntent().getStringExtra("id");
 
+        average.setEnabled(false);
+        length.setEnabled(false);
+
+        //get the  station,fuel,city values
+        station = getIntent().getStringExtra("station");
+        stationName = getIntent().getStringExtra("stationName");
+        fuel = getIntent().getStringExtra("fuelType");
+        city = getIntent().getStringExtra("city");
+
+        System.out.println("---------------------------------------------------");
+        System.out.println(station);
+        System.out.println(stationName);
+        System.out.println(id);
+        System.out.println("---------------------------------------------------");
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                intent.putExtra("email", email);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
         //this is new DBHelper in this page
         DB = new DBHelper(this);
 
@@ -98,7 +122,7 @@ public class ViewLengthQueue extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
             }
         });
 
@@ -119,7 +143,7 @@ public class ViewLengthQueue extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
             }
         });
 
@@ -128,56 +152,102 @@ public class ViewLengthQueue extends AppCompatActivity {
 
         //click eneter button go to your length page
         enterButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddUserQueueDetails.class);
-                System.out.println("inside on click");
-                String url3 = "https://192.168.202.134:44323/api/queue/Queue";
-                String obj = "{'StationId': '" + station + "', 'UserId': '" + id + "','VeihicleType': '" + vehicleType + "','ArrivalTime': '" + java.time.LocalDateTime.now() + "' }";
-
-                System.out.println(obj);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url3, jsonObject, new Response.Listener<JSONObject>() {
+                RequestQueue queue1 = Volley.newRequestQueue(ViewLengthQueue.this);
+                String url2 = "https://192.168.202.134:44323/api/queue/Queue/CheckDepartureTime?id=" + id;
+                StringRequest stringRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
+                        System.out.println(response);
+                        JSONObject jsonResponse = null;
+                        String myObjAsString = null;
                         try {
-                            QueueId = response.getString("queueId").toString();
+                            jsonResponse = new JSONObject(response.toString());
+                            myObjAsString = jsonResponse.getString("queueId");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        System.out.println(response.toString());
+
+                        System.out.println(myObjAsString);
+                        if (myObjAsString != "null") {
+                            Toast.makeText(ViewLengthQueue.this, "Already have Queue please exit the queue", Toast.LENGTH_SHORT).show();
+                        } else {
+                            EnterTheYourLoaction();
+                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        System.out.println(volleyError.toString());
+                    public void onErrorResponse(VolleyError error) {
+
                     }
                 });
-                requestQueue.add(jsonObjectRequest);
-                intent.putExtra("station", station);
-                intent.putExtra("id", id);
-                intent.putExtra("queueId", QueueId);
-                startActivity(intent);
+
+                //add queue string request
+                queue1.add(stringRequest2);
             }
         });
+
         //click the view details and pass the  station,fuel,city values
         viewDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ViewFuelDetails.class);
                 intent.putExtra("station", station);
+                intent.putExtra("stationName", stationName);
                 intent.putExtra("fuelType", fuel);
                 intent.putExtra("city", city);
+                intent.putExtra("email", email);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void EnterTheYourLoaction() {
+        System.out.println("inside on click");
+        String url3 = "https://192.168.202.134:44323/api/queue/Queue";
+        String obj = "{'StationId': '" + station + "', 'UserId': '" + id + "','VeihicleType': '" + vehicleType + "','ArrivalTime': '" + java.time.LocalDateTime.now() + "' }";
+
+        System.out.println(obj);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url3, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    QueueId = response.getString("queueId").toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(ViewLengthQueue.this, "Yor Time Added successfully", Toast.LENGTH_SHORT).show();
+                enetertheYourQueueLocation(QueueId);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println(volleyError.toString());
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void enetertheYourQueueLocation(String queueId) {
+        Intent intent = new Intent(getApplicationContext(), AddUserQueueDetails.class);
+        intent.putExtra("station", station);
+        intent.putExtra("queueId", queueId);
+        intent.putExtra("id", id);
+        intent.putExtra("email", email);
+        intent.putExtra("queueId", QueueId);
+        startActivity(intent);
     }
 
     private void handleSSLHandshake() {

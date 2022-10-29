@@ -61,6 +61,7 @@
                    android:layout_height="68dp"
                    android:layout_margin="10dp"
                    android:hint="Full Name"
+                   android:textColor="@color/black"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileName"/>
 
@@ -78,6 +79,7 @@
                    android:layout_height="68dp"
                    android:layout_margin="10dp"
                    android:hint="Email"
+                   android:textColor="@color/black"
                    android:inputType="textEmailAddress"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileEmail"/>
@@ -97,6 +99,7 @@
                    android:layout_margin="10dp"
                    android:hint="Mobile"
                    android:inputType="phone"
+                   android:textColor="@color/black"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileMobile"/>
 
@@ -114,6 +117,7 @@
                    android:layout_height="68dp"
                    android:layout_margin="10dp"
                    android:hint="User Role"
+                   android:textColor="@color/black"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileRole"/>
 
@@ -131,6 +135,7 @@
                    android:layout_height="68dp"
                    android:layout_margin="10dp"
                    android:hint="Vehicle Type"
+                   android:textColor="@color/black"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileVehicleType"/>
 
@@ -148,6 +153,7 @@
                    android:layout_height="68dp"
                    android:layout_margin="10dp"
                    android:hint="Vehicle No"
+                   android:textColor="@color/black"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileVehicleNo"/>
 
@@ -165,6 +171,7 @@
                    android:layout_height="68dp"
                    android:layout_margin="10dp"
                    android:hint="Fuel Type"
+                   android:textColor="@color/black"
                    android:layout_marginTop="20dp"
                    android:id="@+id/UserProfileFuelType"/>
 

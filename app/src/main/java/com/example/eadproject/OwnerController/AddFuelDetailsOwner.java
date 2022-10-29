@@ -36,6 +36,8 @@ import org.json.JSONObject;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -81,10 +83,6 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
 
         email = getIntent().getStringExtra("email");
         id = getIntent().getStringExtra("id");
-
-//        name = editTextStationName.getText().toString();
-//        stationNo = getEditTextStationNo.getText().toString();
-//        time = arrivalTime.getText().toString();
 
         //new db controller
         DB = new DBHelper(this);
@@ -143,10 +141,6 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                System.out.println("inside res");
-                //System.out.println(response.toString());
-//                res = response.toString();
-
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject object = response.getJSONObject(i);
@@ -180,7 +174,7 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
                 if(fuelType.matches("Choose") || finishStatus.matches("Choose")){
                     Toast.makeText(AddFuelDetailsOwner.this, "Please Select the items", Toast.LENGTH_SHORT).show();
                 }else {
-                    AddingData();
+                    checkTheFuelData(fuelType,stationId1);
                 }
             }
         });
@@ -215,7 +209,32 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
         LocalDateTime now = LocalDateTime.now();
         String time = dtf.format(now);
         arrivalTime.setText(time);
-        //loadData();
+    }
+
+    private void checkTheFuelData(String fuelType, String stationId1) {
+        String url3 = "https://192.168.202.134:44323/api/fuel/FuelDetails/GetFuelDetailsFromStationAndFuel?sId=" + stationId1 + "&fName=" + fuelType;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url3, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println("inside res");
+                System.out.println(response.toString());
+
+                if(response.length() == 0){
+                    AddingData();
+                }else{
+                    Toast.makeText(AddFuelDetailsOwner.this, "Already Added fuel Type", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println(volleyError.toString());
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(jsonArrayRequest);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -305,24 +324,4 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
         }
     }
 
-//    @SuppressLint("Range")
-//    private void loadData() {
-//        sqLiteDatabaseObj = DB.getWritableDatabase();
-//        // Adding search email query to cursor.
-//        cursor = sqLiteDatabaseObj.query(DBHelper.TABLE_NAME, null, " " + DBHelper.Table_Column_2_Email + "=?", new String[]{email}, null, null, null);
-//        while (cursor.moveToNext()) {
-//            if (cursor.isFirst()) {
-//                cursor.moveToFirst();
-//
-//                String stName = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_8_StationName));
-//                String stNo = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_9_StationNo));
-//
-//                editTextStationName.setText(stName);
-//                getEditTextStationNo.setText(stNo);
-//
-//                // Closing cursor.
-//                cursor.close();
-//            }
-//        }
-//    }
 }

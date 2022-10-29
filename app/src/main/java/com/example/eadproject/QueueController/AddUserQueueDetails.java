@@ -3,11 +3,14 @@ package com.example.eadproject.QueueController;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,9 +20,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eadproject.R;
+import com.example.eadproject.UserDashboard.Dashboard;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 /*
  *  This is Add user queue Details page
@@ -28,8 +36,9 @@ import org.json.JSONObject;
 public class AddUserQueueDetails extends AppCompatActivity {
 
     private EditText text1,text2;
-    private String station,id,queueId;
+    private String station,id,queueId,email;
     private Button btn1,btn2;
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +50,16 @@ public class AddUserQueueDetails extends AppCompatActivity {
         text2 = findViewById(R.id.addYourLengthQueue);
         btn1 = findViewById(R.id.btnAddQueueRefresh);
         btn2 = findViewById(R.id.btnAddQueueExit);
+        back = findViewById(R.id.btnAddQueueBack);
 
         //get the length previous page using the putExtra
         station = getIntent().getStringExtra("station");
         id = getIntent().getStringExtra("id");
+        email = getIntent().getStringExtra("email");
         queueId = getIntent().getStringExtra("queueId");
+
+        text1.setEnabled(false);
+        text2.setEnabled(false);
 
         // get the youtime value
         getYourTimeValue();
@@ -62,6 +76,14 @@ public class AddUserQueueDetails extends AppCompatActivity {
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
         //update dipacher time
         btn2.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -79,10 +101,12 @@ public class AddUserQueueDetails extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(Request.Method.PUT, url, jsonObject, new Response.Listener<JSONObject>() {
+                JsonObjectRequest jsonObjectRequest =  new JsonObjectRequest(Request.Method.PATCH, url, jsonObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         System.out.println(response.toString());
+                        Toast.makeText(AddUserQueueDetails.this, "Departure time update successfully", Toast.LENGTH_SHORT).show();
+                        logoff(email);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -90,22 +114,44 @@ public class AddUserQueueDetails extends AppCompatActivity {
                         System.out.println(volleyError.toString());
                     }
                 });
-
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 requestQueue.add(jsonObjectRequest);
             }
         });
     }
 
+    private void logoff(String email) {
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        intent.putExtra("email", email);
+        startActivity(intent);
+    }
+
     private void getStationLength() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://192.168.202.134:44323/api/queue/Queue/GetOneQueueCustomer/" + id;
+        String url = "https://192.168.202.134:44323/api/queue/Queue/GetOne/" + queueId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(String response) {
                 System.out.println(response);
-                //set the your time value
-                text1.setText(response.toString());
+                JSONObject jsonResponse = null;
+                try {
+                    jsonResponse = new JSONObject(response);
+                    String myObjAsString = jsonResponse.getString("arrivalTime");
+
+                    String time = OffsetDateTime.parse(myObjAsString).toLocalTime().toString();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm a");
+                    LocalTime ltObject4 = LocalTime.parse(time);;
+                    String arrivalTime = ltObject4.format(formatter);
+
+                    text1.setText(arrivalTime);
+
+                    System.out.println(myObjAsString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }, new Response.ErrorListener() {
             @Override

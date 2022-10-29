@@ -6,14 +6,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eadproject.OwnerController.Adapter;
+import com.example.eadproject.OwnerController.AddFuelDetailsOwner;
 import com.example.eadproject.OwnerController.Fuel;
 import com.example.eadproject.OwnerController.ViewAllFuelDetails;
 import com.example.eadproject.R;
@@ -34,6 +39,9 @@ import org.json.JSONObject;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -53,13 +61,14 @@ import javax.net.ssl.X509TrustManager;
 
 public class ViewFuelStationDetails extends AppCompatActivity {
 
-    private Spinner spinnerFuelStation,spinnerFuelType,spinnerFuelCity;
-    private String fuelType, city, station,email,id;
+    private Spinner spinnerFuelStation, spinnerFuelType, spinnerFuelCity;
+    private String fuelType, city, station, email, id, stationId, stationNo;
     private Button backButton;
     ArrayList<String> spinnerArray = new ArrayList<>();
     ArrayList<String> spinnerArray2 = new ArrayList<>();
     ArrayAdapter<String> adapter1, adapter3;
-    private TextView stationTextViewNo,arrivalTextViewTime,fuelFinishTextView;
+    private TextView stationTextViewNo, arrivalTextViewTime, fuelFinishTextView;
+    private LinearLayout layout;
 
 
     @Override
@@ -70,26 +79,19 @@ public class ViewFuelStationDetails extends AppCompatActivity {
         spinnerFuelStation = findViewById(R.id.spinnerViewUserFuelStation);
         spinnerFuelType = findViewById(R.id.spinnerViewUserFuelType);
         spinnerFuelCity = findViewById(R.id.spinnerViewUserFuelCity);
-        backButton= findViewById(R.id.btnbackViewUserFuelDetails);
-        stationTextViewNo= findViewById(R.id.textViewFuelStationNo);
-        arrivalTextViewTime= findViewById(R.id.textViewFuelStationArrivalTime);
-        fuelFinishTextView= findViewById(R.id.textViewFuelStationFinishFuel);
+        backButton = findViewById(R.id.btnbackViewUserFuelDetails);
+        stationTextViewNo = findViewById(R.id.textViewFuelStationNo);
+        arrivalTextViewTime = findViewById(R.id.textViewFuelStationArrivalTime);
+        fuelFinishTextView = findViewById(R.id.textViewFuelStationFinishFuel);
+        layout = findViewById(R.id.viewFuellayer);
+
+        layout.setVisibility(View.GONE);
+
+        email = getIntent().getStringExtra("email");
 
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFuelType.setAdapter(adapter2);
-
-        spinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fuelType = adapterView.getItemAtPosition(i).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         //this is the city type spinner adapter
         adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
@@ -198,6 +200,7 @@ public class ViewFuelStationDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
             }
         });
@@ -206,7 +209,36 @@ public class ViewFuelStationDetails extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 station = adapterView.getItemAtPosition(i).toString();
-                checkArriavalTime(station,fuelType);
+                System.out.println("inside on click");
+                String url2 = "https://192.168.202.134:44323/api/station/FuelStation";
+                JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        System.out.println("inside res");
+                        System.out.println(response.toString());
+
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject object = response.getJSONObject(i);
+                                String obj = object.getString("name");
+                                if (station.equals(obj)) {
+                                    stationId = object.getString("stationId");
+                                    stationNo = object.getString("stationNo");
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        System.out.println(volleyError.toString());
+                    }
+                });
+
+                RequestQueue requestQueue2 = Volley.newRequestQueue(getApplicationContext());
+                requestQueue2.add(jsonArrayRequest2);
             }
 
             @Override
@@ -215,33 +247,84 @@ public class ViewFuelStationDetails extends AppCompatActivity {
             }
         });
 
+        spinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                fuelType = adapterView.getItemAtPosition(i).toString();
+                LoadFuelDetails(stationId, stationNo, fuelType);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 
-    private void checkArriavalTime(String station, String fuel) {
-        System.out.println("inside on click");
-        String url = "https://192.168.202.134:44323/api/station/FuelStation";
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+    private void LoadFuelDetails(String stationId, String stationNo, String fuel) {
+        String url3 = "https://192.168.202.134:44323/api/fuel/FuelDetails/GetFuelDetailsFromStationAndFuel?sId=" + stationId + "&fName=" + fuel;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url3, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("inside res");
                 System.out.println(response.toString());
-//                res = response.toString();
 
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject object = response.getJSONObject(i);
-                        String obj = object.getString("name");
-                        if (station.equals(obj)) {
-                            String stationId = object.getString("stationId");
-                            String stationNo = object.getString("stationNo");
+                if (response.length() == 0) {
+                    layout.setVisibility(View.GONE);
+                    stationTextViewNo.setText("");
+                    arrivalTextViewTime.setText("");
+                    fuelFinishTextView.setText("");
 
-                            LoadFuelDetails(stationId,stationNo,fuel);
+                    //Toast.makeText(ViewFuelStationDetails.this, "Not Fuel Type", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject object = response.getJSONObject(i);
+                            String obj = object.getString("fuelName");
+                            System.out.println(fuel);
+                            if (!fuel.equals(obj)) {
+                                stationTextViewNo.setText("");
+                                arrivalTextViewTime.setText("");
+                                fuelFinishTextView.setText("");
+                                layout.setVisibility(View.GONE);
+                            }
+                            if (fuel.equals(obj)) {
+                                layout.setVisibility(View.VISIBLE);
+                                System.out.println(response.toString());
+                                String arrivalTime = object.getString("fuelArrivalTime");
+                                Boolean fuelFinish = object.getBoolean("fuelFinish");
+
+                                String fuelStatus1 = "";
+
+                                if (fuelFinish == true) {
+                                    fuelStatus1 = "Yes";
+                                    fuelFinishTextView.setTextColor(Color.RED);
+                                } else {
+                                    fuelStatus1 = "No";
+                                    fuelFinishTextView.setTextColor(Color.GREEN);
+                                }
+                                String time = OffsetDateTime.parse(arrivalTime).toLocalTime().toString();
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm a");
+                                LocalTime ltObject4 = LocalTime.parse(time);
+                                String timeString = ltObject4.format(formatter);
+
+                                System.out.println(timeString);
+
+                                stationTextViewNo.setText(stationNo);
+                                arrivalTextViewTime.setText(timeString);
+                                fuelFinishTextView.setText(fuelStatus1);
+
+                                Toast.makeText(ViewFuelStationDetails.this, "Display Fuel Type", Toast.LENGTH_SHORT).show();
+                            }
                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -254,58 +337,6 @@ public class ViewFuelStationDetails extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void LoadFuelDetails(String stationId, String stationNo, String fuel) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://192.168.202.134:44323/api/fuel/FuelDetails/GetOneStation/" + stationId;
-        JsonArrayRequest jsonArrayRequestStation = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onResponse(JSONArray response) {
-                System.out.println("Station res");
-                System.out.println(response.toString());
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject object = response.getJSONObject(i);
-                        String obj = object.getString("fuelName");
-                        System.out.println(fuel);
-                        if (fuel.equals(obj)) {
-                            System.out.println(response.toString());
-                            String arrivalTime = object.getString("fuelArrivalTime");
-                            Boolean fuelFinish = object.getBoolean("fuelFinish");
-
-                            String fuelStatus1 ="";
-
-                            if (fuelFinish == true) {
-                                fuelStatus1 = "Yes";
-                            } else {
-                                fuelStatus1 = "No";
-                            }
-//                            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-//                            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.ENGLISH);
-//                            LocalDate date = LocalDate.parse(arrivalTime, inputFormatter);
-//                            String formattedTime = outputFormatter.format(date);
-//                            System.out.println(formattedTime);
-
-                            stationTextViewNo.setText(stationNo);
-                            //arrivalTextViewTime.setText(formattedTime);
-                            fuelFinishTextView.setText(fuelStatus1);
-
-                        }
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                System.out.println(volleyError.toString());
-            }
-        });
-
-        queue.add(jsonArrayRequestStation);
-    }
 
     @SuppressLint("TrulyRandom")
     public static void handleSSLHandshake() {

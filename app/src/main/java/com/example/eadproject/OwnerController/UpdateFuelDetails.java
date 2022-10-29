@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -130,8 +131,10 @@ public class UpdateFuelDetails extends AppCompatActivity {
 
         if (fuelStatus.equals("true")) {
             fuelStatus1 = "Yes";
+            textView.setTextColor(Color.RED);
         } else {
             fuelStatus1 = "No";
+            textView.setTextColor(Color.GREEN);
         }
         textView.setText(fuelStatus1);
 

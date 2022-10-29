@@ -1,9 +1,11 @@
 package com.example.eadproject.fuelController;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,6 +33,9 @@ import org.json.JSONObject;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -51,7 +56,7 @@ import javax.net.ssl.X509TrustManager;
 public class FuelStation extends AppCompatActivity {
 
     private Spinner spinnerFuelStation, spinnerFuelType, spinnerFuelCity;
-    private String fuelType, city, station,email,id;
+    private String fuelType, city, station, email, id;
     private Button nextButton;
     private EditText time;
     String res = "";
@@ -81,13 +86,9 @@ public class FuelStation extends AppCompatActivity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFuelType.setAdapter(adapter2);
 
-//        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
-//
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        //this is the city type spinner adapter
-        adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
         //this is the station type spinner adapter
+        adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+        //this is the city type spinner adapter
         adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray2);
 
         handleSSLHandshake();
@@ -154,7 +155,7 @@ public class FuelStation extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 station = adapterView.getItemAtPosition(i).toString();
-                System.out.println(adapterView.getItemAtPosition(i).toString());
+
             }
 
             @Override
@@ -221,26 +222,86 @@ public class FuelStation extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkValidataion(station,fuelType,city);
+                if (station.equals("") || station.equals(null) || fuelType.equals("") || fuelType.equals(null) || city.equals(null) || fuelType.matches("Choose")) {
+                    Toast.makeText(FuelStation.this, "Please Select the items", Toast.LENGTH_SHORT).show();
+                } else {
+                    checkFuelDetailsforStation(station, email, id, fuelType, city);
+                }
 
             }
         });
 
     }
 
-    private void checkValidataion(String station1, String fuelType1, String city1) {
-        System.out.println(fuelType1);
-        if(station1.equals("") || station1.equals(null) || fuelType1.equals("") || fuelType1.equals(null) || city1.equals(null) || fuelType1.matches("Choose")){
-            Toast.makeText(this, "Please Select the items", Toast.LENGTH_SHORT).show();
-        }else{
-            Intent intent = new Intent(getApplicationContext(), ViewLengthQueue.class);
-            intent.putExtra("station",station1);
-            intent.putExtra("fuelType", fuelType1);
-            intent.putExtra("city", city1);
-            intent.putExtra("email", email);
-            intent.putExtra("id", id);
-            startActivity(intent);
-        }
+    private void checkFuelDetailsforStation(String station, String email, String id, String fuelType, String city) {
+        System.out.println("inside on click");
+        String url = "https://192.168.202.134:44323/api/station/FuelStation";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println("inside res");
+                System.out.println(response.toString());
+//                res = response.toString();
+
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject object = response.getJSONObject(i);
+                        String obj = object.getString("name");
+                        if (station.equals(obj)) {
+                            String stationId = object.getString("stationId");
+                            String stationName = object.getString("name");
+                            LoadFuelDetails(stationId, email, id, fuelType, city, stationName);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println(volleyError.toString());
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void LoadFuelDetails(String stationId, String email, String id, String fuelType, String city, String stationName) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://192.168.202.134:44323/api/fuel/FuelDetails/GetOneStation/" + stationId;
+        JsonArrayRequest jsonArrayRequestStation = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println("Station res");
+                System.out.println(response.toString());
+                if (response.length() != 0) {
+                    checkValidataion(stationId, email, id, fuelType, city, stationName);
+                } else {
+                    Toast.makeText(FuelStation.this, "This does not type of fuel", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println(volleyError.toString());
+            }
+        });
+
+        queue.add(jsonArrayRequestStation);
+    }
+
+    private void checkValidataion(String stationId, String email, String id, String fuelType, String city, String stationName) {
+        Intent intent = new Intent(getApplicationContext(), ViewLengthQueue.class);
+        intent.putExtra("station", stationId);
+        intent.putExtra("fuelType", fuelType);
+        intent.putExtra("stationName", stationName);
+        intent.putExtra("city", city);
+        intent.putExtra("email", email);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 
 

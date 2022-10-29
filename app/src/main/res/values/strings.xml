@@ -23,6 +23,12 @@
         <item>Super Diesel</item>
     </string-array>
 
+    <string-array name="fuelType1">
+        <item>Petrol</item>
+        <item>Diesel</item>
+        <item>Super Diesel</item>
+    </string-array>
+
     <string-array name="finishType">
         <item>Choose</item>
         <item>Yes</item>
