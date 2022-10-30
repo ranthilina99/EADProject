@@ -71,7 +71,7 @@ public class Login extends AppCompatActivity {
                 // Calling login method.
                 LoginFunction();
 
-                EmptyEditTextAfterDataInsert();
+
             }
         });
     }
@@ -102,6 +102,7 @@ public class Login extends AppCompatActivity {
             }
             // Calling method check final result
             CheckFinalResult();
+            EmptyEditTextAfterDataInsert();
         } else {
             //If any of login EditText empty then this block will be executed.
             Toast.makeText(Login.this, "Please Enter Email or Password.", Toast.LENGTH_LONG).show();
@@ -125,7 +126,14 @@ public class Login extends AppCompatActivity {
                 "$";
 
         // Checking EditText is empty or no using TextUtils.
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+        if (email.isEmpty() || password.isEmpty()) {
+            EditTextEmptyHolder = false;
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+        }else if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+            EditTextEmptyHolder = false;
+            Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+        }else if (!password.matches(passwordVal)) {
+            Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
             EditTextEmptyHolder = false;
         }else {
             EditTextEmptyHolder = true;

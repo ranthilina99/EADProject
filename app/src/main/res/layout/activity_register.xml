@@ -141,6 +141,8 @@
                         android:layout_marginTop="10dp"
                         android:backgroundTint="#120F0F"
                         android:hint="ABC"
+                        android:inputType="textCapCharacters"
+                        android:textAllCaps="true"
                         android:layout_margin="10dp"
                         android:padding="16dp"
                         android:textColor="#000000"

@@ -107,45 +107,6 @@ public class Register extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRole.setAdapter(adapter);
 
-        //according to select role empty fields
-        spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                roleType = adapterView.getItemAtPosition(i).toString();
-
-                if (roleType.equals("User")) {
-                    layout2.setVisibility(View.GONE);
-                    layout1.setVisibility(View.VISIBLE);
-                    editTextVehicleNo1.setText(null);
-                    editTextVehicleNo2.setText(null);
-                    editTextAddress.setText(null);
-                    editTextStationName.setText(null);
-                    editTextStationNo.setText(null);
-                } else if (roleType.equals("Owner")) {
-                    layout1.setVisibility(View.GONE);
-                    layout2.setVisibility(View.VISIBLE);
-                    editTextVehicleNo1.setText(null);
-                    editTextVehicleNo2.setText(null);
-                    editTextAddress.setText(null);
-                    editTextStationName.setText(null);
-                    editTextStationNo.setText(null);
-                } else if (roleType.equals("Choose")) {
-                    layout1.setVisibility(View.GONE);
-                    layout2.setVisibility(View.GONE);
-                    editTextVehicleNo1.setText(null);
-                    editTextVehicleNo2.setText(null);
-                    editTextAddress.setText(null);
-                    editTextStationName.setText(null);
-                    editTextPassword.setText(null);
-                    editTextStationNo.setText(null);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         //click the sign in button
         sigin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +169,57 @@ public class Register extends AppCompatActivity {
         adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         editTextCity.setAdapter(adapter4);
 
+        //according to select role empty fields
+        spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                roleType = adapterView.getItemAtPosition(i).toString();
+
+                if (roleType.equals("User")) {
+                    layout2.setVisibility(View.GONE);
+                    layout1.setVisibility(View.VISIBLE);
+                    editTextVehicleNo1.setText(null);
+                    editTextVehicleNo2.setText(null);
+                    editTextAddress.setText(null);
+                    editTextStationName.setText(null);
+                    editTextStationNo.setText(null);
+                    adapter1.notifyDataSetChanged();
+                    adapter2.notifyDataSetChanged();
+                    adapter4.notifyDataSetChanged();
+
+                } else if (roleType.equals("Owner")) {
+                    layout1.setVisibility(View.GONE);
+                    layout2.setVisibility(View.VISIBLE);
+                    editTextVehicleNo1.setText(null);
+                    editTextVehicleNo2.setText(null);
+                    editTextAddress.setText(null);
+                    editTextStationName.setText(null);
+                    editTextStationNo.setText(null);
+                    adapter1.notifyDataSetChanged();
+                    adapter2.notifyDataSetChanged();
+                    adapter4.notifyDataSetChanged();
+
+                } else if (roleType.equals("Choose")) {
+                    layout1.setVisibility(View.GONE);
+                    layout2.setVisibility(View.GONE);
+                    editTextVehicleNo1.setText(null);
+                    editTextVehicleNo2.setText(null);
+                    editTextAddress.setText(null);
+                    editTextStationName.setText(null);
+                    editTextPassword.setText(null);
+                    editTextStationNo.setText(null);
+                    adapter1.notifyDataSetChanged();
+                    adapter2.notifyDataSetChanged();
+                    adapter4.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         //click the register button call the sqllite function and swagger function
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +232,7 @@ public class Register extends AppCompatActivity {
                 // Method to check Email is already exists or not.
                 CheckingEmailAlreadyExistsOrNot();
                 // Empty EditText After done inserting process.
-                EmptyEditTextAfterDataInsert();
+
             }
         });
     }
@@ -261,11 +273,13 @@ public class Register extends AppCompatActivity {
             sqLiteDatabaseObj.close();
             // Printing toast message after done inserting.
             Toast.makeText(Register.this, "User Registered Successfully", Toast.LENGTH_LONG).show();
+            EmptyEditTextAfterDataInsert();
         }
         // This block will execute if any of the registration EditText is empty.
         else {
             // Printing toast message if any of EditText is empty.
             Toast.makeText(Register.this, "Please Fill All The Required Fields.", Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -280,6 +294,7 @@ public class Register extends AppCompatActivity {
         editTextStationName.getText().clear();
         editTextStationNo.getText().clear();
         editTextPassword.getText().clear();
+        editTextRetypepassowrd.getText().clear();
     }
 
     // Method to check EditText is empty or Not.
@@ -299,86 +314,76 @@ public class Register extends AppCompatActivity {
         password = editTextPassword.getText().toString();
         rePassword = editTextRetypepassowrd.getText().toString();
         role = roleType;
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please fill the filed", Toast.LENGTH_SHORT).show();
+
+        if (roleType.equals("Choose")) {
             EditTextEmptyHolder = false;
-        } else {
-            EditTextEmptyHolder = true;
+            Toast.makeText(this, "Please select the role", Toast.LENGTH_SHORT).show();
+        } else if (roleType.equals("User")) {
+            String passwordVal = "^" +
+                    //"(?=.*[0-9])" +         //at least 1 digit
+                    //"(?=.*[a-z])" +         //at least 1 lower case letter
+                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                    "(?=.*[a-zA-Z])" +      //any letter
+                    "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                    "(?=\\S+$)" +           //no white spaces
+                    ".{4,}" +               //at least 4 characters
+                    "$";
+            if (name.isEmpty()) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please fill the name", Toast.LENGTH_SHORT).show();
+            }else if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+            } else if (!mobile.matches("[0-9]{10}")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct mobile", Toast.LENGTH_SHORT).show();
+            }  else if (vehicleType.equals("Choose")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please select vehicle Type", Toast.LENGTH_SHORT).show();
+            } else if (fuelType.equals("Choose")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please select fuel type", Toast.LENGTH_SHORT).show();
+            } else if (!password.matches(passwordVal)) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+            } else if (!rePassword.matches(password)) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+            } else {
+                EditTextEmptyHolder = true;
+            }
+        } else if (roleType.equals("Owner")) {
+            String passwordVal1 = "^" +
+                    //"(?=.*[0-9])" +         //at least 1 digit
+                    //"(?=.*[a-z])" +         //at least 1 lower case letter
+                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                    "(?=.*[a-zA-Z])" +      //any letter
+                    "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                    "(?=\\S+$)" +           //no white spaces
+                    ".{4,}" +               //at least 4 characters
+                    "$";
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Please fill the name", Toast.LENGTH_SHORT).show();
+                EditTextEmptyHolder = false;
+            } else if (cityType.equals("Choose")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please select city", Toast.LENGTH_SHORT).show();
+            } else if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
+            } else if (!mobile.matches("[0-9]{10}")) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct mobile", Toast.LENGTH_SHORT).show();
+            } else if (!password.matches(passwordVal1)) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+            } else if (!rePassword.matches(password)) {
+                EditTextEmptyHolder = false;
+                Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
+            } else {
+                EditTextEmptyHolder = true;
+            }
         }
-        //validation
-//       if(!role.equals("User") || !role.equals("Owner")){
-//           Toast.makeText(this, "Please select the role", Toast.LENGTH_SHORT).show();
-//           if(TextUtils.isEmpty(role)){
-//               String passwordVal = "^" +
-//                       //"(?=.*[0-9])" +         //at least 1 digit
-//                       //"(?=.*[a-z])" +         //at least 1 lower case letter
-//                       //"(?=.*[A-Z])" +         //at least 1 upper case letter
-//                       "(?=.*[a-zA-Z])" +      //any letter
-//                       "(?=.*[@#$%^&+=])" +    //at least 1 special character
-//                       "(?=\\S+$)" +           //no white spaces
-//                       ".{4,}" +               //at least 4 characters
-//                       "$";
-//
-//               Toast.makeText(this, "Please select the role", Toast.LENGTH_SHORT).show();
-//               if(role.equals("User")){
-//                   if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)
-//                           || TextUtils.isEmpty(vehicleNo1) || TextUtils.isEmpty(mobile) || TextUtils.isEmpty(vehicleTypeAdd)
-//                           || TextUtils.isEmpty(fuelTypeAdd)){
-//                       Toast.makeText(this, "Please fill the filed", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
-//                       EditTextEmptyHolder = false ;
-//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
-//                   } else if(!mobile.matches("[0-9]{10}")){
-//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!mobile.matches("[0-9]{10}")){
-//                       Toast.makeText(this, "Please enter correct mobile", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!password.matches(passwordVal)){
-//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!rePassword.matches(password)){
-//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }
-//                   else {
-//                       EditTextEmptyHolder = true ;
-//                   }
-//               }else if(role.equals("Owner")){
-//                   String passwordVal1 = "^" +
-//                           //"(?=.*[0-9])" +         //at least 1 digit
-//                           //"(?=.*[a-z])" +         //at least 1 lower case letter
-//                           //"(?=.*[A-Z])" +         //at least 1 upper case letter
-//                           "(?=.*[a-zA-Z])" +      //any letter
-//                           "(?=.*[@#$%^&+=])" +    //at least 1 special character
-//                           "(?=\\S+$)" +           //no white spaces
-//                           ".{4,}" +               //at least 4 characters
-//                           "$";
-//                   if(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)
-//                           || TextUtils.isEmpty(city) || TextUtils.isEmpty(address)
-//                           || TextUtils.isEmpty(stationName) || TextUtils.isEmpty(stationNo)){
-//                       Toast.makeText(this, "Please fill the filed", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
-//                       EditTextEmptyHolder = false ;
-//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
-//                   } else if(!mobile.matches("[0-9]{10}")){
-//                       Toast.makeText(this, "Please enter correct email", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!password.matches(passwordVal1)){
-//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }else if(!rePassword.matches(password)){
-//                       Toast.makeText(this, "Please enter correct password", Toast.LENGTH_SHORT).show();
-//                       EditTextEmptyHolder = false ;
-//                   }
-//                   else {
-//                       EditTextEmptyHolder = true ;
-//                   }
-//               }
-//           }
-//       }
     }
 
     // Checking Email is already exists or not.
