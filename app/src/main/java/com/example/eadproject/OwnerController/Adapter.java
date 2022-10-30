@@ -2,6 +2,7 @@ package com.example.eadproject.OwnerController;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         //holder.fuelId.setText(fuels.get(position).getStationId());
         holder.stationName.setText(fuels.get(position).getStationName());
         holder.fuelType.setText(fuels.get(position).getFuelType());
-        holder.fuelfinish.setText(fuels.get(position).getFinishStatus().toString());
+        if(fuels.get(position).getFinishStatus().toString() == "true"){
+            holder.fuelfinish.setText("Available");
+            holder.fuelfinish.setTextColor(Color.GREEN);
+        }else{
+            holder.fuelfinish.setText("Not Available");
+            holder.fuelfinish.setTextColor(Color.RED);
+        }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

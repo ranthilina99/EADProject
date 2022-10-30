@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity {
             CheckFinalResult();
         } else {
             //If any of login EditText empty then this block will be executed.
-            Toast.makeText(Login.this, "Please Enter UserName or Password.", Toast.LENGTH_LONG).show();
+            Toast.makeText(Login.this, "Please Enter Email or Password.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -127,7 +127,7 @@ public class Login extends AppCompatActivity {
         // Checking EditText is empty or no using TextUtils.
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             EditTextEmptyHolder = false;
-        } else {
+        }else {
             EditTextEmptyHolder = true;
         }
     }

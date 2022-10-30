@@ -277,7 +277,12 @@ public class ViewFuelStationDetails extends AppCompatActivity {
                     arrivalTextViewTime.setText("");
                     fuelFinishTextView.setText("");
 
-                    //Toast.makeText(ViewFuelStationDetails.this, "Not Fuel Type", Toast.LENGTH_SHORT).show();
+                    if(fuel.matches("Choose")){
+
+                    }else{
+                        Toast.makeText(ViewFuelStationDetails.this, "Not Fuel Type", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
                     try {
                         for (int i = 0; i < response.length(); i++) {
@@ -299,11 +304,11 @@ public class ViewFuelStationDetails extends AppCompatActivity {
                                 String fuelStatus1 = "";
 
                                 if (fuelFinish == true) {
-                                    fuelStatus1 = "Yes";
-                                    fuelFinishTextView.setTextColor(Color.RED);
-                                } else {
-                                    fuelStatus1 = "No";
+                                    fuelStatus1 = "Available";
                                     fuelFinishTextView.setTextColor(Color.GREEN);
+                                } else {
+                                    fuelStatus1 = "Not Available";
+                                    fuelFinishTextView.setTextColor(Color.RED);
                                 }
                                 String time = OffsetDateTime.parse(arrivalTime).toLocalTime().toString();
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm a");

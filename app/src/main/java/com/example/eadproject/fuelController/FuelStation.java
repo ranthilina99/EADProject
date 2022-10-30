@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eadproject.DBHelper.DBHelper;
 import com.example.eadproject.QueueController.ViewLengthQueue;
 import com.example.eadproject.R;
 import com.example.eadproject.UserDashboard.Dashboard;
@@ -55,14 +58,18 @@ import javax.net.ssl.X509TrustManager;
 
 public class FuelStation extends AppCompatActivity {
 
-    private Spinner spinnerFuelStation, spinnerFuelType, spinnerFuelCity;
+    private Spinner spinnerFuelStation, spinnerFuelCity;
     private String fuelType, city, station, email, id;
     private Button nextButton;
     private EditText time;
+    private SQLiteDatabase sqLiteDatabaseObj;
+    private Cursor cursor;
     String res = "";
+    DBHelper DB;
     ArrayList<String> spinnerArray = new ArrayList<>();
     ArrayList<String> spinnerArray2 = new ArrayList<>();
     ArrayAdapter<String> adapter1, adapter3;
+    private EditText FuelTypeEdit;
     ArrayList<String> newList = new ArrayList<>();
 
     @Override
@@ -74,23 +81,21 @@ public class FuelStation extends AppCompatActivity {
         email = getIntent().getStringExtra("email");
         id = getIntent().getStringExtra("id");
 
+        DB = new DBHelper(this);
+
         //assign the ids for variables
         spinnerFuelStation = findViewById(R.id.spinnerViewStationUserFuelStation);
-        spinnerFuelType = findViewById(R.id.spinnerViewStationUserFuelType);
+        FuelTypeEdit = findViewById(R.id.spinnerViewStationUserFuelType);
         spinnerFuelCity = findViewById(R.id.spinnerViewStationUserCity);
         nextButton = findViewById(R.id.btnFuelStationNext);
         time = findViewById(R.id.textAddFuelStationArrivalTimeOwner);
-
-        //this is the fuel type spinner
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.fuelType, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFuelType.setAdapter(adapter2);
 
         //this is the station type spinner adapter
         adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
         //this is the city type spinner adapter
         adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray2);
 
+        FuelTypeEdit.setEnabled(false);
         handleSSLHandshake();
 
         System.out.println("inside on click");
@@ -137,19 +142,9 @@ public class FuelStation extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(jsonArrayRequest);
 
+        loadData();
 
-        spinnerFuelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fuelType = adapterView.getItemAtPosition(i).toString();
-                System.out.println(adapterView.getItemAtPosition(i).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        fuelType = FuelTypeEdit.getText().toString();
 
         spinnerFuelStation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -227,7 +222,6 @@ public class FuelStation extends AppCompatActivity {
                 } else {
                     checkFuelDetailsforStation(station, email, id, fuelType, city);
                 }
-
             }
         });
 
@@ -241,7 +235,6 @@ public class FuelStation extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 System.out.println("inside res");
                 System.out.println(response.toString());
-//                res = response.toString();
 
                 try {
                     for (int i = 0; i < response.length(); i++) {
@@ -332,6 +325,24 @@ public class FuelStation extends AppCompatActivity {
                 }
             });
         } catch (Exception ignored) {
+        }
+    }
+
+    @SuppressLint("Range")
+    private void loadData() {
+        sqLiteDatabaseObj = DB.getWritableDatabase();
+        // Adding search email query to cursor.
+        cursor = sqLiteDatabaseObj.query(DBHelper.TABLE_NAME, null, " " + DBHelper.Table_Column_2_Email + "=?", new String[]{email}, null, null, null);
+        while (cursor.moveToNext()) {
+            if (cursor.isFirst()) {
+                cursor.moveToFirst();
+                // Storing Password associated with entered email.
+                 String fuelType1 = cursor.getString(cursor.getColumnIndex(DBHelper.Table_Column_11_FuelType));
+
+                FuelTypeEdit.setText(fuelType1);
+                // Closing cursor.
+                cursor.close();
+            }
         }
     }
 }

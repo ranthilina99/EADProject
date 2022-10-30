@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -84,9 +85,11 @@ public class ViewFuelDetails extends AppCompatActivity {
                             String fuelStatus1 = "";
 
                             if (fuelFinish == true) {
-                                fuelStatus1 = "Yes";
+                                fuelStatus1 = "Available";
+                                textViewFinishTime.setTextColor(Color.GREEN);
                             } else {
-                                fuelStatus1 = "No";
+                                fuelStatus1 = "Not Available";
+                                textViewFinishTime.setTextColor(Color.RED);
                             }
                             String time = OffsetDateTime.parse(arrivalTime).toLocalTime().toString();
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm a");

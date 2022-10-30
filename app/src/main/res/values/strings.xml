@@ -19,6 +19,8 @@
     <string-array name="fuelType">
         <item>Choose</item>
         <item>Petrol</item>
+        <item>Petrol 92</item>
+        <item>Petrol 95</item>
         <item>Diesel</item>
         <item>Super Diesel</item>
     </string-array>

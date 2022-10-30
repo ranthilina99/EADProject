@@ -148,8 +148,9 @@ public class AddFuelDetailsOwner extends AppCompatActivity {
                         if (email.equals(obj)) {
                             String name = object.getString("ownerId");
                             String stationNo = object.getString("stationNo");
+                            String stationName = object.getString("name");
                             stationId1 = object.getString("stationId");
-                            editTextStationName.setText(name);
+                            editTextStationName.setText(stationName);
                             getEditTextStationNo.setText(stationNo);
                         }
                     }

@@ -6,10 +6,9 @@
     android:layout_height="95dp">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="91dp"
-        android:background="@drawable/bg1"
+        android:background="@drawable/bg3"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

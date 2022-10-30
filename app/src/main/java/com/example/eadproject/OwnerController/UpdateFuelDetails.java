@@ -81,7 +81,7 @@ public class UpdateFuelDetails extends AppCompatActivity {
 
         //this is request queue backend volley library
         requestQueue1 = Volley.newRequestQueue(getApplicationContext());
-
+        FuelType.setEnabled(false);
         //set finish details in spinner
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.finishType, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -130,11 +130,11 @@ public class UpdateFuelDetails extends AppCompatActivity {
         editArrivalTime.setText(time);
 
         if (fuelStatus.equals("true")) {
-            fuelStatus1 = "Yes";
-            textView.setTextColor(Color.RED);
-        } else {
-            fuelStatus1 = "No";
+            fuelStatus1 = "Available";
             textView.setTextColor(Color.GREEN);
+        } else {
+            fuelStatus1 = "Not Available";
+            textView.setTextColor(Color.RED);
         }
         textView.setText(fuelStatus1);
 
